@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" class="nm-np">
+<head>
+    <meta charset="utf-8"/>
+    <title>{+title /}</title>
+    <link rel="stylesheet" href="css/app.css"/>
+</head>
+<body class="nm-np">
+<header class="grey">
+    <div class="wrapper">
+        <h1>{@pre type="content" key="storeName"/}</h1>
+        <nav>
+            <ul class="nm-np inline">
+                <li><a href="/">{@pre type="content" key="buy"/}</a></li>
+                <li><a href="/products">{@pre type="content" key="edit"/}</a></li>
+                <li><a href="/cart">{@pre type="content" key="cart"/}</a></li>
+            </ul>
+        </nav>
+        <div class="lang">
+            <ul class="nm-np inline">
+                <li><a href="/setLanguage/EN-us"><img src="/img/us.png" alt="English"></a></li>
+                <li><a href="/setLanguage/ES-es"><img src="/img/es.png" alt="Spanish"></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="wrapper">
+    {+body /}
+</div>
+<div id="tentacle"></div>
+</body>
+</html>

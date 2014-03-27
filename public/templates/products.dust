@@ -1,0 +1,49 @@
+{>"layouts/master" /}
+{<title}
+    Product Editor
+{/title}
+
+{<body}
+    <h2>Product Editor</h2>
+    <main role="main">
+        <div class="mb2">
+            <fieldset>
+                <legend>Add a new product</legend>
+                <form method="POST" action="/products">
+                    <input name="name" placeholder="Product Name"><br>
+                    <input name="price" placeholder="Price"><br>
+                    <input type="hidden" name="_csrf" value="{_csrf}">
+                    <input type="submit" value="Save">
+                </form>
+            </fieldset>
+        </div>
+
+        <div class="products">
+            {?products}
+                <fieldset>
+                    <legend>Product List</legend>
+                    <ul class="nm-np inline">
+                        {#products}
+                            <li>
+                                <form method="POST" action="/products">
+                                    <input type="hidden" name="item_id" value="{.id}">
+
+                                    <h3 class="nm-np">{.name}</h3>
+                                    <h4 class="nm-np">{.prettyPrice}</h4>
+                                    <h5 class="nm-np tiny">ID: {.id}</h5>
+
+                                    <input type="submit" value="Delete">
+                                    <!--If we don't at the Cross-Site Request Forgey token, this POST will be rejected-->
+                                    <input type="hidden" name="_csrf" value="{_csrf}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                </form>
+                            </li>
+                        {/products}
+                    </ul>
+                </fieldset>
+            {:else}
+                There are no products :(
+            {/products}
+        </div>
+    </main>
+{/body}
