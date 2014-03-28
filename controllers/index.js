@@ -18,9 +18,9 @@ module.exports = function (app) {
             });
 			var model = {
 				products: prods
-			}
+			};
 			res.render('index', model);
-		})
+		});
 
 	});
 };

@@ -29,7 +29,7 @@ module.exports = function (server) {
 		{
 			cart: displayCart
 		};
-		console.log(model.cart.items[0])
+		console.log(model.cart.items[0]);
 		res.render('cart', model);
 	});
 
