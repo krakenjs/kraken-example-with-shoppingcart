@@ -1,0 +1,70 @@
+{
+    "express": {
+        "view cache": false,
+        "view engine": "js",
+        "views": "path:./.build/templates"
+    },
+
+    "view engines": {
+        "js": {
+            "module": "engine-munger",
+            "renderer": {
+                "method": "js",
+                "arguments": [
+                    { "cache": true },
+                    {
+                        "views": "config:express.views",
+                        "view engine": "config:express.view engine",
+                        "specialization": "config:specialization",
+                        "i18n": "config:i18n"
+                    }
+                ]
+            }
+        }
+    },
+
+    "i18n": {
+        "contentPath": "path:./locales",
+        "fallback": "en-US"
+    },
+    "databaseConfig": {
+        "host": "localhost",
+        "database": "shocart"
+    },
+
+    "paypalConfig": {
+        "host": "api.sandbox.paypal.com",
+        "port": "",
+        "client_id": "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+        "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM"
+    },
+    "middleware": {
+
+        "static": {
+            "arguments": [ "path:./.build" ]
+        },
+
+        "router": {
+            "arguments": [{ "directory": "path:./controllers" }]
+        },
+        "locale": {
+            "module": "path:./lib/locale",
+            "priority": 95,
+            "enabled": true
+        },
+        "fileNotFound": {
+            "enabled": true,
+            "priority": 130,
+            "module": "kraken-js/middleware/404",
+            "arguments": [ "errors/404" ]
+        },
+
+        "serverError": {
+            "enabled": true,
+            "priority": 140,
+            "module": "kraken-js/middleware/500",
+            "arguments": [ "errors/500" ]
+        }
+    }
+
+}
