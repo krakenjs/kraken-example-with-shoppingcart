@@ -2,14 +2,14 @@
  * A very simple product editor
  */
 'use strict';
-var Product = require('../models/productModel');
+var Product = require('../../models/productModel');
 
 module.exports = function (server) {
 
 	/**
 	 * Retrieve a list of all products for editing.
 	 */
-	server.get('/products', function (req, res) {
+	server.get('/', function (req, res) {
 
 		Product.find(function (err, prods) {
 			if (err) {
@@ -32,7 +32,7 @@ module.exports = function (server) {
 	 * Add a new product to the database.
 	 * **** PLEASE READ THE COMMENT BELOW! ****
 	 */
-	server.post('/products', function (req, res) {
+	server.post('/', function (req, res) {
 		var name = req.body.name && req.body.name.trim();
 
 		//***** PLEASE READ THIS COMMENT ******\\\
@@ -77,7 +77,7 @@ module.exports = function (server) {
 	 * Delete a product.
 	 * @paaram: req.body.item_id Is the unique id of the product to remove.
 	 */
-	server.delete('/products', function (req, res) {
+	server.delete('/', function (req, res) {
 		Product.remove({_id: req.body.item_id}, function (err) {
 			if (err) {
 				console.log('Remove error: ', err);
@@ -91,7 +91,7 @@ module.exports = function (server) {
 	 * Edit a product.
 	 * Not implemented here
 	 */
-	server.put('/products', function (req, res) {
+	server.put('/', function (req, res) {
 		console.log('PUT received. Ignoring.');
 		res.redirect('/products');
 	});

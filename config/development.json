@@ -28,31 +28,29 @@
         "devtools": {
             "enabled": true,
             "priority": 35,
-            "module": "kraken-devtools",
-            "arguments": [
-                "path:./public",
-                "path:./.build",
-                {
-                    "livereload": {
-                        "debug": false,
-                        "exts": [ "dust", "less" ]
-                    },
-                    "dust": {
-                        "module": "kraken-devtools/plugins/dustjs",
-                        "files": "/templates/**/*.js",
-                        "base": "templates",
-                        "i18n": "config:i18n"
-                    },
-                    "less": {
-                        "module": "kraken-devtools/plugins/less",
-                        "files": "/css/**/*.css"
-                    },
-                    "copier": {
-                        "module": "kraken-devtools/plugins/copier",
-                        "files": "**/*"
+            "module": {
+                "name": "kraken-devtools",
+                "arguments": [
+                    "path:./public",
+                    "path:./.build",
+                    {
+                        "dust": {
+                            "module": "kraken-devtools/plugins/dustjs",
+                            "files": "/templates/**/*.js",
+                            "base": "templates",
+                            "i18n": "config:i18n"
+                        },
+                        "less": {
+                            "module": "kraken-devtools/plugins/less",
+                            "files": "/css/**/*.css"
+                        },
+                        "copier": {
+                            "module": "kraken-devtools/plugins/copier",
+                            "files": "**/*"
+                        }
                     }
-                }
-            ]
+                ]
+            }
         }
     }
 

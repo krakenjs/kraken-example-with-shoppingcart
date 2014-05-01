@@ -6,7 +6,7 @@ module.exports = function (server) {
 	/**
 	 * Send information to PayPal
 	 */
-	server.post('/pay', function (req, res) {
+	server.post('/', function (req, res) {
 
 		//Read the incoming product data
 		var cc = req.param('cc'),

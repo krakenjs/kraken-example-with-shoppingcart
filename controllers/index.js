@@ -4,10 +4,10 @@
 var Product = require('../models/productModel');
 
 
-module.exports = function (app) {
+module.exports = function (router) {
 
 
-	app.get('/', function (req, res) {
+	router.get('/', function (req, res) {
 
 		Product.find(function (err, prods) {
 			if (err) {
@@ -23,4 +23,9 @@ module.exports = function (app) {
 		});
 
 	});
+
+    router.get('/setLanguage/:locale', function (req, res) {
+        res.cookie('locale', req.params.locale);
+        res.redirect('/');
+    });
 };

@@ -41,30 +41,43 @@
     "middleware": {
 
         "static": {
-            "arguments": [ "path:./.build" ]
+            "module": {
+                "arguments": [ "path:./.build" ]
+            }
         },
 
         "router": {
-            "arguments": [{ "directory": "path:./controllers" }]
+            "module": {
+                "arguments": [{ "directory": "path:./controllers" }]
+            }
         },
-        "locale": {
-            "module": "path:./lib/locale",
-            "priority": 95,
-            "enabled": true
-        },
+
         "fileNotFound": {
             "enabled": true,
             "priority": 130,
-            "module": "kraken-js/middleware/404",
-            "arguments": [ "errors/404" ]
+            "module": {
+                "name": "kraken-js/middleware/404",
+                "arguments": [ "errors/404" ]
+            }
         },
 
         "serverError": {
             "enabled": true,
             "priority": 140,
-            "module": "kraken-js/middleware/500",
-            "arguments": [ "errors/500" ]
+            "module": {
+                "name" : "kraken-js/middleware/500",
+                "arguments": [ "errors/500" ]
+            }
+        },
+
+        "locale": {
+            "priority": 95,
+            "enabled": true,
+            "module": {
+                "name": "path:./lib/locale"
+            }
         }
+
     }
 
 }
