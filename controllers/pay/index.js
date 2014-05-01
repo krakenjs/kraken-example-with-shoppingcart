@@ -1,12 +1,12 @@
 'use strict';
 var paypal = require('paypal-rest-sdk');
 
-module.exports = function (server) {
+module.exports = function (router) {
 
 	/**
 	 * Send information to PayPal
 	 */
-	server.post('/', function (req, res) {
+	router.post('/', function (req, res) {
 
 		//Read the incoming product data
 		var cc = req.param('cc'),

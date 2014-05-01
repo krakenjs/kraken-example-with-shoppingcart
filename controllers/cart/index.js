@@ -1,12 +1,12 @@
 'use strict';
 var Product = require('../../models/productModel');
 
-module.exports = function (server) {
+module.exports = function (router) {
 
 	/**
 	 * Display the shopping cart
 	 */
-	server.get('/', function (req, res) {
+	router.get('/', function (req, res) {
 
 		//Retrieve the shopping cart from memory
 		var cart = req.session.cart,
@@ -36,7 +36,7 @@ module.exports = function (server) {
 	/**
 	 * Add an item to the shopping cart
 	 */
-	server.post('/', function (req, res) {
+	router.post('/', function (req, res) {
 
 		//Load (or initialize) the cart
 		req.session.cart = req.session.cart || {};
