@@ -15,7 +15,7 @@ module.exports = function (router) {
 			total = 0;
 		var locals = res.locals;
 		var locality = locals && locals.context && locals.context.locality || i18n.fallback;
-
+		var cartLength;
 		if (!cart) {
 			res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
 				res.render('result', {result: messages.empty, continueMessage: messages.keepShopping});
@@ -30,12 +30,11 @@ module.exports = function (router) {
 			total += (cart[item].qty * cart[item].price);
 		}
 		req.session.total = displayCart.total = total.toFixed(2);
-		var cartLength = Object.keys(cart).length;
+		cartLength = Object.keys(cart).length;
 		var model =
 		{
 			cart: displayCart
 		};
-		console.log("cartLength", cartLength);
 		res.bundle.get({'bundle': 'messages', 'model': {'cartItemLength': cartLength}, 'locality': locality}, function bundleReturn(err, messages) {
 			model.itemsInCart = messages.items;
 			console.log("model", model);

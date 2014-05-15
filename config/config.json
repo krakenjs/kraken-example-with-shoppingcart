@@ -21,7 +21,7 @@
             }
         }
     },
-	"bundle engine": "dust",
+    "bundle engine": "dust",
     "i18n": {
         "contentPath": "path:./locales",
         "fallback": "en-US"
