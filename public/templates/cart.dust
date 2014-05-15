@@ -3,7 +3,8 @@
 {<body}
     <main role="main">
         <div class="products mb2">
-            <h2>Your cart </h2>
+            <h2>{@pre type="content" key="yourcart"/}</h2>
+            <p>{itemsInCart}</p>
             <ul class="nm-np inline">
                 {#cart.items}
                     <li>

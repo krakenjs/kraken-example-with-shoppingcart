@@ -1,12 +1,14 @@
 'use strict';
 var paypal = require('paypal-rest-sdk');
+var getBundle = require('../../lib/getBundle');
+
 
 module.exports = function (router) {
 
 	/**
 	 * Send information to PayPal
 	 */
-	router.post('/', function (req, res) {
+	router.post('/', getBundle, function (req, res) {
 
 		//Read the incoming product data
 		var cc = req.param('cc'),
@@ -14,7 +16,9 @@ module.exports = function (router) {
 			lastName = req.param('lastName'),
 			expMonth = req.param('expMonth'),
 			expYear = req.param('expYear'),
-			cvv = req.param('cvv');
+			cvv = req.param('cvv'),
+			locals = res.locals,
+			locality = locals && locals.context && locals.context.locality || i18n.fallback;
 
 		//Ready the payment information to pass to the PayPal library
 		var payment = {
@@ -56,14 +60,18 @@ module.exports = function (router) {
 		paypal.payment.create(payment, {}, function (err, resp) {
 			if (err) {
 				console.log(err);
-				res.render('result',{result:'Error :('});
+				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
+					res.render('result', {'result': messages.paymentError, 'continueMessage': messages.tryAgain});
+				});
 				return;
 			}
 
 			if (resp) {
 				delete req.session.cart;
 				delete req.session.displayCart;
-				res.render('result',{result:'Success :)'});
+				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
+					res.render('result', {'result': messages.paymentSuccess, 'continueMessage': messages.keepShopping});
+				});
 			}
 		});
 	});
