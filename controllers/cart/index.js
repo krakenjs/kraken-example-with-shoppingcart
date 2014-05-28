@@ -14,6 +14,7 @@ module.exports = function (router) {
 			displayCart = {items: [], total: 0},
 			total = 0;
 		var locals = res.locals;
+		var i18n = res.app.kraken.get('i18n');
 		var locality = locals && locals.context && locals.context.locality || i18n.fallback;
 		var cartLength;
 		if (!cart) {

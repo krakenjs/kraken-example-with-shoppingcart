@@ -18,6 +18,7 @@ module.exports = function (router) {
 			expYear = req.param('expYear'),
 			cvv = req.param('cvv'),
 			locals = res.locals,
+			i18n = res.app.kraken.get('i18n'),
 			locality = locals && locals.context && locals.context.locality || i18n.fallback;
 
 		//Ready the payment information to pass to the PayPal library
