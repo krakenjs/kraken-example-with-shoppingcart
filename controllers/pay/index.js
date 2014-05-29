@@ -11,15 +11,15 @@ module.exports = function (router) {
 	router.post('/', getBundle, function (req, res) {
 
 		//Read the incoming product data
-		var cc = req.param('cc'),
-			firstName = req.param('firstName'),
-			lastName = req.param('lastName'),
-			expMonth = req.param('expMonth'),
-			expYear = req.param('expYear'),
-			cvv = req.param('cvv'),
-			locals = res.locals,
-			i18n = res.app.kraken.get('i18n'),
-			locality = locals && locals.context && locals.context.locality || i18n.fallback;
+		var cc = req.param('cc');
+		var firstName = req.param('firstName');
+		var lastName = req.param('lastName');
+		var expMonth = req.param('expMonth');
+		var expYear = req.param('expYear');
+		var cvv = req.param('cvv');
+		var locals = res.locals;
+		var i18n = res.app.kraken.get('i18n');
+		var locality = locals && locals.context && locals.context.locality || i18n.fallback;
 
 		//Ready the payment information to pass to the PayPal library
 		var payment = {
