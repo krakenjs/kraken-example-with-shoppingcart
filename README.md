@@ -2,6 +2,22 @@
 
 Kraken with Shopping Cart and PayPal integration
 
+## Prerequisites
+* This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
+* You will --of course-- need [Node](http://nodejs.org) (Version >= 0.10.22 preferred)
+
+## Installation
+This example is a part of the kraken-examples repository. Clone, install and run.
+
+```shell
+$ git clone git@github.com:krakenjs/kraken-examples.git
+$ cd kraken-examples
+$ npm install
+$ cd with.shoppingcart
+$ ln -s ../package.json package.json & ln -s ../node_modules node_modules
+$ npm start
+```
+
 ## Illustrates
 
 * Usage of mongodb for storing product information
