@@ -38,7 +38,6 @@ module.exports = function (router) {
 		};
 		res.bundle.get({'bundle': 'messages', 'model': {'cartItemLength': cartLength}, 'locality': locality}, function bundleReturn(err, messages) {
 			model.itemsInCart = messages.items;
-			console.log("model", model);
 			res.render('cart', model);
 		});
 

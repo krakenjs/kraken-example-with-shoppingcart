@@ -75,6 +75,14 @@
             "module": {
                 "name": "path:./lib/locale"
             }
+        },
+
+        "expressView": {
+            "priority": 100,
+            "enabled": true,
+            "module": {
+                "name": "engine-munger/lib/expressView"
+            }
         }
 
     }
