@@ -1,0 +1,66 @@
+{
+  "name": "kraken-examples-with.shoppingcart",
+  "version": "0.1.0",
+  "description": "Example applications built with kraken",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krakenjs/kraken-examples"
+  },
+  "keywords": [
+    "express",
+    "kraken",
+    "kraken-js",
+    "krakenjs",
+    "examples"
+  ],
+  "author": "Jeff Harrell <jeharrell@paypal.com>",
+  "contributors": [
+    {
+      "name": "Poornima Venkatakrishnan",
+      "email": "pvenkatakrishnan@paypal.com"
+    },
+    {
+      "name": "Matt Edelman",
+      "email": "medelman@paypal.com"
+    }
+  ],
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/krakenjs/kraken-examples/issues"
+  },
+  "homepage": "https://github.com/krakenjs/kraken-examples",
+  "dependencies": {
+    "kraken-js": "^1.0.1",
+    "kraken-devtools": "^1.0.0",
+    "engine-munger": "^0.2.0",
+    "express": "^4.3.0",
+    "dustjs-helpers": "~1.2.0",
+    "dustjs-linkedin": "~2.3.4",
+    "requirejs": "~2.1.11",
+    "adaro": "~0.1.5",
+    "localizr": "~0.1.0",
+    "less": "~1.7.0",
+    "mongoose": "~3.8.8",
+    "paypal-rest-sdk": "^0.6.4",
+    "bundalo": "^0.2.4",
+    "debuglog": "^1.0.1",
+    "localeresolver": "^0.1.1"
+  },
+  "devDependencies": {
+    "mocha": "^1.18.0",
+    "supertest": "^0.9.0",
+    "grunt-contrib-requirejs": "^0.4.3",
+    "grunt-dustjs": "^1.2.1",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-config-dir": "^0.3.2",
+    "grunt-copy-to": "0.0.10",
+    "grunt-localizr": "^0.1.0",
+    "grunt-contrib-jshint": "^0.6.5",
+    "grunt": "^0.4.4",
+    "grunt-contrib-less": "^0.9.0",
+    "grunt-mocha-cli": "^1.7.0"
+  }
+}
