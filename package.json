@@ -44,7 +44,7 @@
     "localizr": "~0.1.0",
     "less": "~1.7.0",
     "mongoose": "~3.8.8",
-    "paypal-rest-sdk": "^0.6.4",
+    "paypal-rest-sdk": "^1.5.2",
     "bundalo": "^0.2.4",
     "debuglog": "^1.0.1",
     "localeresolver": "^0.1.1"
