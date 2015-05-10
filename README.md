@@ -7,14 +7,19 @@ Kraken with Shopping Cart and PayPal integration
 * You will -- of course -- need [Node](http://nodejs.org) (Version >= 0.10.22 preferred)
 
 ## Installation
-This example is a part of the kraken-examples repository. Clone, install and run.
+
+Clone, install and run.
 
 ```shell
-$ git clone git@github.com:krakenjs/kraken-examples.git
-$ cd kraken-examples/with.shoppingcart
-$ npm install
-$ npm start
+git clone git@github.com:krakenjs/kraken-example-with-shoppingcart.git
+cd kraken-example-with-shoppingcart
+npm install
+npm start
 ```
+
+## Explore the app
+
+Visit [`http://localhost:8000`](http://localhost:8000)
 
 ## Illustrates
 
