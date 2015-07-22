@@ -1,10 +1,10 @@
 {
-  "name": "kraken-examples-with.shoppingcart",
+  "name": "kraken-example-with-shoppingcart",
   "version": "0.1.0",
   "description": "Example applications built with kraken",
   "repository": {
     "type": "git",
-    "url": "https://github.com/krakenjs/kraken-examples"
+    "url": "https://github.com/krakenjs/kraken-example-with-shoppingcart"
   },
   "keywords": [
     "express",
@@ -28,10 +28,7 @@
     "start": "node index.js"
   },
   "license": "Apache 2.0",
-  "bugs": {
-    "url": "https://github.com/krakenjs/kraken-examples/issues"
-  },
-  "homepage": "https://github.com/krakenjs/kraken-examples",
+  "homepage": "http://krakenjs.com/",
   "dependencies": {
     "kraken-js": "^1.0.1",
     "kraken-devtools": "^1.0.0",
