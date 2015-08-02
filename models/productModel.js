@@ -15,6 +15,7 @@ var productModel = function () {
         var greeting = this.name ?
             'Hello, I\'m a ' + this.name + ' and I\'m worth ' + this.prettyPrice()
             : 'I don\'t have a name :(';
+        return greeting;
     };
 
     //Format the price of the product to show a dollar sign, and two decimal places

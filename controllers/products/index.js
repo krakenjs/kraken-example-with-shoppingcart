@@ -60,7 +60,8 @@ module.exports = function (router) {
 		var newProduct = new Product({name: name, price: price});
 
 		//Show it in console for educational purposes...
-		newProduct.whatAmI();
+		console.log(newProduct.whatAmI());
+
 		/* The call back recieves to more arguments ->product/s that is/are added to the database
 		 and number of rows that are affected because of save, which right now are ignored
 		 only errors object is consumed*/
