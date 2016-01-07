@@ -6,6 +6,7 @@
 var kraken = require('kraken-js'),
     express = require('express'),
     request = require('supertest'),
+    path = require('path'),
     spec = require('../lib/spec');
 
 
@@ -18,7 +19,7 @@ describe('/', function () {
         app = express();
         app.on('start', done);
         app.use(kraken({
-            basedir: process.cwd(),
+            basedir: path.resolve(__dirname, '..'),
             onconfig: spec().onconfig
         }));
 
