@@ -25,7 +25,8 @@
     }
   ],
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha"
   },
   "license": "Apache 2.0",
   "homepage": "http://krakenjs.com/",
