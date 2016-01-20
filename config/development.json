@@ -8,16 +8,11 @@
 
     "view engines": {
         "dust": {
-            "module": "engine-munger",
+            "module": "makara",
             "renderer": {
                 "method": "dust",
                 "arguments": [
-                    { "cache": false },
-                    {
-                        "views": "config:express.views",
-                        "view engine": "config:express.view engine",
-                        "i18n": "config:i18n"
-                    }
+                    { "cache": false, "helpers": "config:dust.helpers" }
                 ]
             }
         }

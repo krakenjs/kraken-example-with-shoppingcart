@@ -1,14 +1,14 @@
 {>"layouts/master" /}
 {<title}
-    Product Editor
+    {@pre type="content" key="title"/}
 {/title}
 
 {<body}
-    <h2>Product Editor</h2>
+    <h2>{@pre type="content" key="title"/}</h2>
     <main role="main">
         <div class="mb2">
             <fieldset>
-                <legend>Add a new product</legend>
+                <legend>{@pre type="content" key="addProduct"/}</legend>
                 <form method="POST" action="/products">
                     <input name="name" placeholder="Product Name"><br>
                     <input name="price" placeholder="Price"><br>
@@ -21,7 +21,7 @@
         <div class="products">
             {?products}
                 <fieldset>
-                    <legend>Product List</legend>
+                    <legend>{@pre type="content" key="productList"/}</legend>
                     <ul class="nm-np inline">
                         {#products}
                             <li>
@@ -42,7 +42,7 @@
                     </ul>
                 </fieldset>
             {:else}
-                There are no products :(
+                {@pre type="content" key="noProducts"/}
             {/products}
         </div>
     </main>
