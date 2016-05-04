@@ -1,27 +1,18 @@
 {
     "express": {
+        "view engine": "jsx",
+        "view": "require:react-engine/lib/expressView",
         "view cache": false,
-        "view engine": "dust",
-        "views": "path:./public/templates"
+        "views": "path:./public/views"
     },
 
     "view engines": {
-        "dust": {
-            "module": "makara",
+        "jsx": {
+            "module": "react-engine/lib/server",
             "renderer": {
-                "method": "dust",
-                "arguments": [
-                    { "cache": true, "helpers": "config:dust.helpers" }
-                ]
+                "method": "create"
             }
         }
-    },
-    "dust": {
-        "helpers": [
-
-            "dust-makara-helpers"
-
-        ]
     },
     "bundle engine": "dust",
     "i18n": {
@@ -46,31 +37,18 @@
                 "arguments": [ "path:./.build" ]
             }
         },
-
+        "methodOverride": {
+            "priority": 90,
+            "enabled": true,
+            "module": {
+                "name": "path:./lib/methodOverride"
+            }
+        },
         "router": {
             "module": {
                 "arguments": [{ "directory": "path:./controllers" }]
             }
         },
-
-        "fileNotFound": {
-            "enabled": true,
-            "priority": 130,
-            "module": {
-                "name": "kraken-js/middleware/404",
-                "arguments": [ "errors/404" ]
-            }
-        },
-
-        "serverError": {
-            "enabled": true,
-            "priority": 140,
-            "module": {
-                "name" : "kraken-js/middleware/500",
-                "arguments": [ "errors/500" ]
-            }
-        },
-
         "locale": {
             "priority": 95,
             "enabled": true,
@@ -78,17 +56,15 @@
                 "name": "path:./lib/locale"
             }
         },
-
-
-        "makara": {
+        "reactContentLoader": {
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "makara",
-                "arguments": [ {
-                    "i18n": "config:i18n"
-                } ]
-
+                "name": "anemone",
+                "arguments": [{
+                    "contentPath": "path:./locales",
+                    "fallback": "en-US"
+                }]
             }
         }
 

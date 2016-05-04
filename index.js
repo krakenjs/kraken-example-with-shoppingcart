@@ -4,8 +4,14 @@
 var kraken = require('kraken-js'),
     app = require('express')(),
     options = require('./lib/spec')(),
-    port = process.env.PORT || 8000;
+    nodeJSX = require('node-jsx'),
+port = process.env.PORT || 8000;
 
+// install node-jsx, so that we
+// can require `.jsx` files in node.
+nodeJSX.install({
+    extension: '.jsx'
+});
 
 app.use(kraken(options));
 

@@ -3,6 +3,9 @@
 
 module.exports = function IndexModel() {
     return {
-        name: 'kraken-example-shopping-cart'
+        props: {
+            name: 'kraken-example-shopping-cart'
+        }
+
     };
 };

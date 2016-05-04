@@ -1,8 +1,0 @@
-{>"layouts/master" /}
-
-{<body}
-    <main role="main">
-        {result}
-        <h3><a href="/">{continueMessage}</a></h3>
-    </main>
-{/body}

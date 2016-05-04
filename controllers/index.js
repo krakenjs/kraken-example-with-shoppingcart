@@ -17,7 +17,8 @@ module.exports = function (router) {
                 prod.prettyPrice = prod.prettyPrice();
             });
 			var model = {
-				products: prods
+				products: prods,
+				title: 'Kraken Store'
 			};
 			res.render('index', model);
 		});
@@ -25,7 +26,9 @@ module.exports = function (router) {
 	});
 
     router.get('/setLanguage/:locale', function (req, res) {
-        res.cookie('locale', req.params.locale);
+		var language = req.params.locale.split('-')[1];
+		var country = req.params.locale.split('-')[0];
+        res.cookie('locale', {language: language, country: country});
         res.redirect('/');
     });
 };
