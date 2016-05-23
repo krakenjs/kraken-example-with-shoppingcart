@@ -15,11 +15,10 @@ module.exports = function (router) {
 			if (err) {
 				console.log(err);
 			}
-			prods.forEach(function(prod) {
+			prods.forEach(function (prod) {
 				prod.prettyPrice = prod.prettyPrice();
 			});
-			var model =
-			{
+			var model = {
 				products: prods
 			};
 			res.render('products', model);
@@ -65,8 +64,8 @@ module.exports = function (router) {
 		/* The call back recieves to more arguments ->product/s that is/are added to the database
 		 and number of rows that are affected because of save, which right now are ignored
 		 only errors object is consumed*/
-		newProduct.save(function(err) {
-			if(err) {
+		newProduct.save(function (err) {
+			if (err) {
 				console.log('save error', err);
 			}
 
@@ -76,7 +75,7 @@ module.exports = function (router) {
 
 	/**
 	 * Delete a product.
-	 * @paaram: req.body.item_id Is the unique id of the product to remove.
+	 * @param: req.body.item_id Is the unique id of the product to remove.
 	 */
 	router.delete('/', function (req, res) {
 		Product.remove({_id: req.body.item_id}, function (err) {

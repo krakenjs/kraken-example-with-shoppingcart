@@ -17,9 +17,6 @@ module.exports = function (router) {
 		var expMonth = req.param('expMonth');
 		var expYear = req.param('expYear');
 		var cvv = req.param('cvv');
-		var locals = res.locals;
-		var i18n = res.app.kraken.get('i18n');
-		var locality = locals && locals.context && locals.context.locality || i18n.fallback;
 
 		//Ready the payment information to pass to the PayPal library
 		var payment = {
@@ -32,7 +29,7 @@ module.exports = function (router) {
 		};
 
 		// Identify credit card type. Patent pending. Credit cards starting with 3 = amex, 4 = visa, 5 = mc , 6 = discover
-		var ccType = (['amex','visa','mastercard','discover'])[parseInt(cc.slice(0,1),10)-3];
+		var ccType = (['amex', 'visa', 'mastercard', 'discover'])[parseInt(cc.slice(0, 1), 10) - 3];
 
 		//Set the credit card
 		payment.payer.funding_instruments[0] =
@@ -61,8 +58,9 @@ module.exports = function (router) {
 		paypal.payment.create(payment, {}, function (err, resp) {
 			if (err) {
 				console.log(err);
-				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
-					res.render('result', {'result': messages.paymentError, 'continueMessage': messages.tryAgain});
+				res.render('result', {
+					result: res.bundle.get('paymentError'),
+					continueMessage: res.bundle.get('tryAgain')
 				});
 				return;
 			}
@@ -70,8 +68,9 @@ module.exports = function (router) {
 			if (resp) {
 				delete req.session.cart;
 				delete req.session.displayCart;
-				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
-					res.render('result', {'result': messages.paymentSuccess, 'continueMessage': messages.keepShopping});
+				res.render('result', {
+					result: res.bundle.get('paymentSuccess'),
+					continueMessage: res.bundle.get('keepShopping')
 				});
 			}
 		});
