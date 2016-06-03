@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------*\
- |  Copyright (C) 2015 PayPal                                                                                          |
+ |  Copyright (C) 2016 PayPal                                                                                          |
  |                                                                                                                     |
  |  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance     |
  |  with the License.                                                                                                  |
@@ -13,27 +13,28 @@
  |  the specific language governing permissions and limitations under the License.                                     |
  \*-------------------------------------------------------------------------------------------------------------------*/
 
-
 'use strict';
 
-var Routes = require('../routes.jsx');
-var Client = require('react-engine/lib/client');
+var React = require('react');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var IndexRoute = ReactRouter.IndexRoute;
+var browserHistory = ReactRouter.browserHistory;
 
-// Include all view files. Browserify doesn't do
-// this automatically as it can only operate on
-// static require statements.
-require('./views/**/*.jsx', {glob: true});
+var Layout = require('./public/views/layout.jsx');
+var Index = require('./public/views/index.jsx');
+var Cart = require('./public/views/cart.jsx');
+var Result = require('./public/views/result.jsx');
+var Products = require('./public/views/products.jsx');
 
-// boot options
-var options = {
-	routes: Routes,
-	// supply a function that can be called
-	// to resolve the file that was rendered.
-	viewResolver: function(viewName) {
-		return require('./views/' + viewName);
-	}
-};
-
-document.addEventListener('DOMContentLoaded', function onLoad() {
-	Client.boot(options);
-});
+var routes = module.exports = (
+  <Router>
+	  <Route path='/' component={Layout}>
+		  <IndexRoute component={Index} />
+		  <Route path='/cart' component={Cart} />
+		  <Route path='/products' component={Products} />
+		  <Route path='/result' component={Result} />
+	  </Route>
+  </Router>
+);

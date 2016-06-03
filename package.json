@@ -25,29 +25,42 @@
     }
   ],
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha"
+    "start": "grunt build && node index.js",
+    "test": "mocha",
+    "build": "grunt build"
   },
   "license": "Apache 2.0",
   "homepage": "http://krakenjs.com/",
   "dependencies": {
     "anemone": "^1.0.0",
+    "async": "^2.0.0-rc.5",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-register": "^6.9.0",
     "bundalo": "^1.0.0",
     "debuglog": "^1.0.1",
     "express": "^4.3.0",
+    "history": "^2.1.2",
     "intl-messageformat": "^1.3.0",
+    "jquery": "^2.2.4",
+    "json-loader": "^0.5.4",
     "kraken-format-path": "^1.0.0",
     "kraken-js": "^2.0.1",
+    "lodash": "^4.13.1",
     "mongoose": "~3.8.8",
     "node-jsx": "^0.13.3",
     "paypal-rest-sdk": "^1.5.2",
-    "react": "^15.0.2",
+    "pubsub-js": "^1.5.3",
+    "react": "^15.1.0",
     "react-engine": "^3.3.0",
-    "react-router": "^2.4.0",
-    "spundle": "^1.0.3"
+    "react-router": "^2.4.1",
+    "spundle": "^1.0.3",
+    "webpack": "^1.13.1"
   },
   "devDependencies": {
     "construx": "^1.0.0",
+    "construx-browserify": "^1.1.0",
     "construx-copier": "^1.0.0",
     "construx-less": "^1.0.0",
     "grunt": "^0.4.4",
@@ -58,7 +71,10 @@
     "grunt-contrib-less": "^0.9.0",
     "grunt-copy-to": "0.0.10",
     "grunt-mocha-cli": "^1.7.0",
+    "history": "^2.1.1",
     "mocha": "^1.18.0",
+    "reactify": "^1.1.1",
+    "require-globify": "^1.3.0",
     "supertest": "^0.9.0"
   }
 }

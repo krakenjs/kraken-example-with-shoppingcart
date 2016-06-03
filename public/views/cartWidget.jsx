@@ -13,27 +13,15 @@
  |  the specific language governing permissions and limitations under the License.                                     |
  \*-------------------------------------------------------------------------------------------------------------------*/
 
-
 'use strict';
 
-var Routes = require('../routes.jsx');
-var Client = require('react-engine/lib/client');
+var React = require('react');
 
-// Include all view files. Browserify doesn't do
-// this automatically as it can only operate on
-// static require statements.
-require('./views/**/*.jsx', {glob: true});
 
-// boot options
-var options = {
-	routes: Routes,
-	// supply a function that can be called
-	// to resolve the file that was rendered.
-	viewResolver: function(viewName) {
-		return require('./views/' + viewName);
-	}
-};
+module.exports = React.createClass({
 
-document.addEventListener('DOMContentLoaded', function onLoad() {
-	Client.boot(options);
+    render: function render() {
+        var totalItems = this.props.totalItems;
+        return (<span>{totalItems}</span>);
+    }
 });

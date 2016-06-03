@@ -5,12 +5,17 @@
         "view cache": false,
         "views": "path:./public/views"
     },
-
     "view engines": {
         "jsx": {
             "module": "react-engine/lib/server",
             "renderer": {
-                "method": "create"
+                "method": "create",
+                "arguments": [
+                    {
+                        "routes": "require:./routes.jsx",
+                        "routesFilePath": "path:./routes.jsx"
+                    }
+                ]
             }
         }
     },
@@ -22,7 +27,6 @@
         "host": "localhost",
         "database": "shocart"
     },
-
     "paypalConfig": {
         "host": "api.sandbox.paypal.com",
         "port": "",
@@ -30,10 +34,11 @@
         "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM"
     },
     "middleware": {
-
         "static": {
             "module": {
-                "arguments": [ "path:./.build" ]
+                "arguments": [
+                    "path:./.build"
+                ]
             }
         },
         "methodOverride": {
@@ -43,11 +48,15 @@
                 "name": "path:./lib/methodOverride"
             }
         },
-        "router": {
-            "module": {
-                "arguments": [{ "directory": "path:./controllers" }]
-            }
-        },
+//        "router": {
+//            "module": {
+//                "arguments": [
+//                    {
+//                        "index": "path:./routes"
+//                    }
+//                ]
+//            }
+//        },
         "locale": {
             "priority": 95,
             "enabled": true,
@@ -60,13 +69,13 @@
             "enabled": true,
             "module": {
                 "name": "anemone",
-                "arguments": [{
-                    "contentPath": "path:./locales",
-                    "fallback": "en-US"
-                }]
+                "arguments": [
+                    {
+                        "contentPath": "path:./locales",
+                        "fallback": "en-US"
+                    }
+                ]
             }
         }
-
     }
-
 }

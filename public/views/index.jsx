@@ -15,38 +15,60 @@
 
 'use strict';
 
-var Layout = require('./layout.jsx');
 var React = require('react');
+var $ = require('jquery');
+var ps = require('pubsub-js');
 
 module.exports = React.createClass({
+	handleSubmit: function (e) {
+		var self = this;
+		e.preventDefault();
+		console.log('submit!', e);
+		$.ajax({
+			url: '/cart',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				_csrf: this.props._csrf,
+				item_id: $(e.target).data('productid')
+			},
+			cache: false,
+			success: function (data) {
+				console.log('data', data);
+				ps.publish('cartUpdate', data.cart.totalItems);
+			}.bind(this),
+			error: function (xhr, status, err) {
+				console.error(this.props.url, status, err.toString());
+			}.bind(this)
+		});
+	},
+	render: function render() {
+		var csrf = this.props._csrf;
+		var msgs = this.props.messages.index;
+		var products = this.props.products;
+		var self = this;
+		return (
+		  <main role="main" >
+			  <p>{msgs.greeting}</p>
 
-    render: function render() {
-        var csrf = this.props._csrf;
-        var msgs = this.props.messages.index;
-        return (
-            <Layout {...this.props}>
-                <main role="main">
-                    <p>{msgs.greeting}</p>
-
-                    <div className="products">
-                        <ul className="nm-np inline">
-                            {(this.props.products && this.props.products.length > 0) ? this.props.products.map(function (product) {
-                                return (
-                                  <li>
-                                      <form method="POST" action="cart">
-                                          <input type="hidden" name="item_id" value={product.id}/>
-                                          <h3 className="nm-np">{product.name}</h3>
-                                          <h4 className="nm-np">{product.prettyPrice}</h4>
-                                          <input type="submit" value={msgs.addToCart}/>
-                                          <input type="hidden" name="_csrf" value={csrf}/>
-                                      </form>
-                                  </li>
-                                );
-                            }) : <li>{msgs.noProducts}</li>}
-                        </ul>
-                    </div>
-                </main>
-            </Layout>
-        );
-    }
+			  <div className="products">
+				  <ul className="nm-np inline">{
+					  (products && products.length > 0) ? products.map(function (product) {
+						  console.log('product', product);
+						  return (
+							<li key={product._id}>
+								<form method="POST" action="cart" data-productid={product._id}
+									  onSubmit={self.handleSubmit}>
+									<h3 className="nm-np">{product.name}</h3>
+									<h4 className="nm-np">{product.prettyPrice}</h4>
+									<input type="submit" value={msgs.addToCart}/>
+								</form>
+							</li>
+						  );
+					  }) : <li>{msgs.noProducts}</li>
+				  }</ul>
+			  </div>
+		  </main>
+		);
+	}
 });

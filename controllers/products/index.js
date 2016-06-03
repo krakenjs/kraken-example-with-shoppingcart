@@ -21,7 +21,7 @@ module.exports = function (router) {
 			var model = {
 				products: prods
 			};
-			res.render('products', model);
+			res.render('/products', model);
 		});
 
 	});

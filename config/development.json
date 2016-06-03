@@ -12,13 +12,26 @@
                     "path:./public",
                     "path:./.build",
                     {
-                        "copier": {
-                            "module": "construx-copier",
-                            "files": "**/*"
+                        "browserify": {
+                            "module": "construx-browserify",
+                            "files": "**/*.js",
+                            "precompile": "require:./construx/skipread",
+                            "bundles": {
+                                "/bundle.js": {
+                                    "src": "path:./public/main.js",
+                                    "options": {
+                                        "transform": ["reactify", "require-globify"]
+                                    }
+                                }
+                            }
                         },
                         "css": {
                             "module": "construx-less",
                             "files": "/css/**/*.css"
+                        },
+                        "copier": {
+                            "module": "construx-copier",
+                            "files": "**/*"
                         }
                     }
                 ]

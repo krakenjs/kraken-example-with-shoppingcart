@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------*\
- |  Copyright (C) 2015 PayPal                                                                                          |
+ |  Copyright (C) 2016 PayPal                                                                                          |
  |                                                                                                                     |
  |  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance     |
  |  with the License.                                                                                                  |
@@ -13,27 +13,35 @@
  |  the specific language governing permissions and limitations under the License.                                     |
  \*-------------------------------------------------------------------------------------------------------------------*/
 
-
 'use strict';
 
-var Routes = require('../routes.jsx');
-var Client = require('react-engine/lib/client');
+module.exports = {
 
-// Include all view files. Browserify doesn't do
-// this automatically as it can only operate on
-// static require statements.
-require('./views/**/*.jsx', {glob: true});
+	entry: __dirname + '/public/main.js',
 
-// boot options
-var options = {
-	routes: Routes,
-	// supply a function that can be called
-	// to resolve the file that was rendered.
-	viewResolver: function(viewName) {
-		return require('./views/' + viewName);
+	output: {
+		path: __dirname + '/public',
+		filename: 'bundle.js'
+	},
+
+	module: {
+		loaders: [
+			{
+				test: /\.jsx?$/,
+				exclude: /node_modules/,
+				loader: 'babel-loader',
+				query: {
+					presets: ['react', 'es2015']
+				}
+			},
+			{
+				test: /\.json$/,
+				loader: 'json-loader'
+			}
+		]
+	},
+
+	resolve: {
+		extensions: ['', '.js', '.jsx', '.json']
 	}
 };
-
-document.addEventListener('DOMContentLoaded', function onLoad() {
-	Client.boot(options);
-});

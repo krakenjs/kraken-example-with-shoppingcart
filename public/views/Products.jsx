@@ -15,7 +15,6 @@
 
 'use strict';
 
-var Layout = require('./layout.jsx');
 var React = require('react');
 
 
@@ -25,9 +24,8 @@ module.exports = React.createClass({
         var csrf = this.props._csrf;
         var products = this.props.products;
         return (
-          <Layout {...this.props}>
-              <h2>{msgs.title}</h2>
               <main role="main">
+                  <h2>{msgs.title}</h2>
                   <div className="mb2">
                       <fieldset>
                           <legend>{msgs.addProduct}</legend>
@@ -45,13 +43,14 @@ module.exports = React.createClass({
                           <legend>{msgs.productList}</legend>
                           <ul className="nm-np inline">
                               {(products && products.length > 0) ? products.map(function (product) {
+                                  console.log('product', product);
                                   return (
-                                    <li>
+                                    <li key={product.id || product._id}>
                                       <form method="POST" action="/products">
-                                          <input type="hidden" name="item_id" value={product.id}/>
+                                          <input type="hidden" name="item_id" value={product.id || product._id}/>
                                           <h3 className="nm-np">{product.name}</h3>
                                           <h4 className="nm-np">{product.prettyPrice}</h4>
-                                          <h5 className="nm-np tiny">{product.id}</h5>
+                                          <h5 className="nm-np tiny">{product.id || product._id}</h5>
                                           <input type="submit" value="Delete"/>
                                           {/*If we don't at the Cross-Site Request Forgey token, this POST will be rejected*/}
                                           <input type="hidden" name="_csrf" value={csrf}/>
@@ -64,7 +63,6 @@ module.exports = React.createClass({
                       </fieldset>
                   </div>
               </main>
-          </Layout>
         );
     }
 });

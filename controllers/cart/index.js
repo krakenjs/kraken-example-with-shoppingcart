@@ -30,7 +30,7 @@ module.exports = function (router) {
 			cart: displayCart
 		};
 		model.itemsInCart = res.bundle.getIntl('items', {cartItemLength: cartLength});
-		res.render('cart', model);
+		res.render('/cart', model);
 
 	});
 
