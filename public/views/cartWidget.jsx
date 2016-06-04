@@ -28,10 +28,9 @@ module.exports = React.createClass({
         return {totalItems: this.props.cart && this.props.cart.totalItems};
     },
     componentDidMount: function () {
-        var self = this;
         ps.subscribe('cartUpdate', function (msg, cart) {
-            self.handleCartUpdate(cart);
-        });
+            this.handleCartUpdate(cart);
+        }.bind(this));
     },
     render: function render() {
         //var totalItems = this.props.totalItems;

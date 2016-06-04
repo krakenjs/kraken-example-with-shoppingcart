@@ -16,52 +16,26 @@
 'use strict';
 
 var React = require('react');
-var CartWidget = require('./cartWidget.jsx');
-var StatusWidget = require('./statusWidget.jsx');
-var Router = require('react-router');
+var ps = require('pubsub-js');
 
 module.exports = React.createClass({
+	getInitialState: function () {
+		return {requestInProgress: false};
+	},
+	componentDidMount: function () {
+		ps.subscribe('startRequest', function (msg, evt) {
+			console.log('startRequest', evt.message);
+			this.setState({requestInProgress: true, progressMessage: evt.message});
+		}.bind(this));
+		ps.subscribe('endRequest', function (msg, evt) {
+			console.log('endRequest', evt.message);
+			this.setState({requestInProgress: false, progressMessage: evt.message});
+		}.bind(this));
+	},
 	render: function render() {
-		var msgs = this.props.messages['layouts/master'];
-		return (
-		  <html lang='en' className='nm-np'>
-		  <head>
-			  <meta charSet='utf-8'/>
-			  <title>{msgs.storeName}</title>
-			  <link rel='stylesheet' href='/css/app.css'/>
-			  <script src='/bundle.js'></script>
-		  </head>
-		  <body className='nm-np'>
-		  <StatusWidget/>
-		  <header className='grey'>
-			  <div className='wrapper'>
-				  <h1>{msgs.storeName}</h1>
-				  <nav>
-					  <ul className='nm-np inline'>
-						  <li>
-							  <Router.Link to='/'>{msgs.buy}</Router.Link>
-						  </li>
-						  <li>
-							  <Router.Link to='/products'>{msgs.edit}</Router.Link>
-						  </li>
-						  <li>
-							  <Router.Link to='/cart'>{msgs.cart}</Router.Link>
-							  <CartWidget {...this.props}/>
-						  </li>
-					  </ul>
-				  </nav>
-				  <div className='lang'>
-					  <ul className='nm-np inline'>
-						  <li><a href='/setLanguage/EN-us'><img src='/img/us.png' alt='English'/></a></li>
-						  <li><a href='/setLanguage/ES-es'><img src='/img/es.png' alt='Spanish'/></a></li>
-					  </ul>
-				  </div>
-			  </div>
-		  </header>
-		  <div className='wrapper'>{this.props.children}</div>
-		  <div id='tentacle'></div>
-		  </body>
-		  </html>
-		);
+		if (this.state.requestInProgress) {
+			return (<div className='statusWidget'><h2>{this.state.progressMessage}</h2></div>)
+		}
+		return null;
 	}
 });

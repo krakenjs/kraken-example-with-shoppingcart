@@ -28,6 +28,7 @@ module.exports = React.createClass({
 	},
 	handleSubmit: function (e) {
 		e.preventDefault();
+		ps.publish('startRequest', {message: 'Payment in progress'});
 		$.ajax({
 			url: '/pay',
 			type: 'POST',
@@ -44,6 +45,8 @@ module.exports = React.createClass({
 				delete store.cart;
 				this.setState(data.cart);
 				ps.publish('cartUpdate', data.cart);
+				ps.publish('endRequest', {message: 'Payment complete'});
+
 			}.bind(this),
 			error: function (xhr, status, err) {
 				console.error(this.props.url, status, err.toString());
