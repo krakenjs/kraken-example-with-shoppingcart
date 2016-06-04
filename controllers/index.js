@@ -81,7 +81,7 @@ var modelBuilder = function (req, res, callback) {
 
 		model.products = result.products.products;
 		model.cart = result.cart;
-		console.log('model', model);
+		//console.log('model', model);
 		callback(null, model);
 	});
 }
@@ -153,7 +153,7 @@ module.exports.newProduct = function (req, res) {
 
 	//Some very lightweight input checking
 	if (name === '' || isNaN(price)) {
-		res.redirect('/products#BadInput');
+		res.status(200).json({rekt: true});
 		return;
 	}
 
@@ -170,16 +170,27 @@ module.exports.newProduct = function (req, res) {
 			console.log('save error', err);
 		}
 
-		res.redirect('/products');
+		modelBuilder(req, res, function (err, model) {
+			if (err) {
+				return next(err);
+			}
+			res.status(200).json(model);
+		});
 	});
 };
 
-module.exports.deleteProduct = function (req, res) {
+module.exports.deleteProduct = function (req, res, next) {
 	Product.remove({_id: req.body.item_id}, function (err) {
 		if (err) {
-			console.log('Remove error: ', err);
+			console.error('Remove error: ', err);
+			return next(err);
 		}
-		res.redirect('/products');
+		modelBuilder(req, res, function (err, model) {
+			if (err) {
+				return next(err);
+			}
+			res.status(200).json(model);
+		});
 	});
 };
 
@@ -233,7 +244,7 @@ module.exports.pay = function (req, res) {
 	paypal.payment.create(payment, {}, function (err, resp) {
 		if (err) {
 			console.log(err);
-			res.render('/result', {
+			res.status(200).json({
 				result: res.bundle.get('paymentError'),
 				continueMessage: res.bundle.get('tryAgain')
 			});
@@ -243,10 +254,15 @@ module.exports.pay = function (req, res) {
 		if (resp) {
 			delete req.session.cart;
 			delete req.session.displayCart;
-			res.render('/result', {
-				result: res.bundle.get('paymentSuccess'),
-				continueMessage: res.bundle.get('keepShopping')
+			modelBuilder(req, res, function (err, model) {
+				if (err) {
+					return next(err);
+				}
+				model.cart.result =  res.bundle.get('paymentSuccess');
+				model.cart.continueMessage = res.bundle.get('keepShopping')
+				res.status(200).json(model);
 			});
+
 		}
 	});
 };

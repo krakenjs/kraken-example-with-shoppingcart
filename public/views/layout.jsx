@@ -16,67 +16,50 @@
 'use strict';
 
 var React = require('react');
-var Router = require('react-router');
 var CartWidget = require('./cartWidget.jsx');
-var ps = require('pubsub-js');
-module.exports = React.createClass({
-    handleCartUpdate: function (totalItems) {
-        this.setState({totalItems: totalItems});
-    },
-    getInitialState: function () {
-        //setInterval(this.handleCartUpdate, 1000);
-        return {totalItems: this.props.cart && this.props.cart.totalItems};
-    },
-    componentDidMount: function () {
-        var self = this;
-        ps.subscribe('cartUpdate', function (msg, items) {
-            self.handleCartUpdate(items);
-        });
-    },
-    componentWillUnmount: function () {
+var Router = require('react-router');
 
-    },
-    render: function render() {
-        var msgs = this.props.messages['layouts/master'];
-        var self = this;
-        return (
-            <html lang='en' className='nm-np'>
-                <head>
-                    <meta charSet='utf-8'/>
-                    <title>{msgs.storeName}</title>
-                    <link rel='stylesheet' href='/css/app.css'/>
-                    <script src='/bundle.js'></script>
-                </head>
-                <body className='nm-np'>
-                <header className='grey'>
-                    <div className='wrapper'>
-                        <h1>{msgs.storeName}</h1>
-                        <nav>
-                            <ul className='nm-np inline'>
-                                <li>
-                                    <Router.Link to='/'>{msgs.buy}</Router.Link>
-                                </li>
-                                <li>
-                                    <Router.Link to='/products'>{msgs.edit}</Router.Link>
-                                </li>
-                                <li>
-                                    <Router.Link to='/cart'>{msgs.cart}</Router.Link>
-                                    <CartWidget totalItems={self.state.totalItems}/>
-                                </li>
-                            </ul>
-                        </nav>
-                        <div className='lang'>
-                            <ul className='nm-np inline'>
-                                <li><a href='/setLanguage/EN-us'><img src='/img/us.png' alt='English'/></a></li>
-                                <li><a href='/setLanguage/ES-es'><img src='/img/es.png' alt='Spanish'/></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </header>
-                <div className='wrapper'>{this.props.children}</div>
-                <div id='tentacle'></div>
-                </body>
-            </html>
-        );
-    }
+module.exports = React.createClass({
+	render: function render() {
+		var msgs = this.props.messages['layouts/master'];
+		return (
+		  <html lang='en' className='nm-np'>
+		  <head>
+			  <meta charSet='utf-8'/>
+			  <title>{msgs.storeName}</title>
+			  <link rel='stylesheet' href='/css/app.css'/>
+			  <script src='/bundle.js'></script>
+		  </head>
+		  <body className='nm-np'>
+		  <header className='grey'>
+			  <div className='wrapper'>
+				  <h1>{msgs.storeName}</h1>
+				  <nav>
+					  <ul className='nm-np inline'>
+						  <li>
+							  <Router.Link to='/'>{msgs.buy}</Router.Link>
+						  </li>
+						  <li>
+							  <Router.Link to='/products'>{msgs.edit}</Router.Link>
+						  </li>
+						  <li>
+							  <Router.Link to='/cart'>{msgs.cart}</Router.Link>
+							  <CartWidget {...this.props}/>
+						  </li>
+					  </ul>
+				  </nav>
+				  <div className='lang'>
+					  <ul className='nm-np inline'>
+						  <li><a href='/setLanguage/EN-us'><img src='/img/us.png' alt='English'/></a></li>
+						  <li><a href='/setLanguage/ES-es'><img src='/img/es.png' alt='Spanish'/></a></li>
+					  </ul>
+				  </div>
+			  </div>
+		  </header>
+		  <div className='wrapper'>{this.props.children}</div>
+		  <div id='tentacle'></div>
+		  </body>
+		  </html>
+		);
+	}
 });

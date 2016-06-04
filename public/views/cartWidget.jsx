@@ -16,12 +16,25 @@
 'use strict';
 
 var React = require('react');
+var ps = require('pubsub-js');
 
 
 module.exports = React.createClass({
-
+    handleCartUpdate: function (cart) {
+        this.setState({totalItems: cart.totalItems});
+    },
+    getInitialState: function () {
+        //setInterval(this.handleCartUpdate, 1000);
+        return {totalItems: this.props.cart && this.props.cart.totalItems};
+    },
+    componentDidMount: function () {
+        var self = this;
+        ps.subscribe('cartUpdate', function (msg, cart) {
+            self.handleCartUpdate(cart);
+        });
+    },
     render: function render() {
-        var totalItems = this.props.totalItems;
-        return (<span>{totalItems}</span>);
+        //var totalItems = this.props.totalItems;
+        return (<span className='cartCounter'>{this.state.totalItems}</span>);
     }
 });

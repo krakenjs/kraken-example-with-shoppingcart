@@ -18,8 +18,20 @@
 var React = require('react');
 var $ = require('jquery');
 var ps = require('pubsub-js');
-
+var store = require('../store');
 module.exports = React.createClass({
+	getInitialState: function () {
+		return store && store.products && {products: store.products} || {products: this.props.products};
+	},
+	componentDidMount: function () {
+		var self = this;
+		this.productUpdate = ps.subscribe('productUpdate', function (msg, cart) {
+			self.setState({products: store.products});
+		});
+	},
+	componentWillUnmount: function () {
+		ps.unsubscribe(this.productUpdate);
+	},
 	handleSubmit: function (e) {
 		var self = this;
 		e.preventDefault();
@@ -35,7 +47,8 @@ module.exports = React.createClass({
 			cache: false,
 			success: function (data) {
 				console.log('data', data);
-				ps.publish('cartUpdate', data.cart.totalItems);
+				store.cart = data.cart;
+				ps.publish('cartUpdate', data.cart);
 			}.bind(this),
 			error: function (xhr, status, err) {
 				console.error(this.props.url, status, err.toString());
@@ -43,9 +56,8 @@ module.exports = React.createClass({
 		});
 	},
 	render: function render() {
-		var csrf = this.props._csrf;
 		var msgs = this.props.messages.index;
-		var products = this.props.products;
+		var products = this.state.products;
 		var self = this;
 		return (
 		  <main role="main" >

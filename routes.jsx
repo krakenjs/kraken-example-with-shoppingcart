@@ -34,7 +34,6 @@ var routes = module.exports = (
 		  <IndexRoute component={Index} />
 		  <Route path='/cart' component={Cart} />
 		  <Route path='/products' component={Products} />
-		  <Route path='/result' component={Result} />
 	  </Route>
   </Router>
 );
