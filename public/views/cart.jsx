@@ -26,19 +26,8 @@ module.exports = React.createClass({
 	getInitialState: function () {
 		return store && store.cart || this.props.cart;
 	},
-	componentDidMount: function () {
-		var self = this;
-		this.cartUpdate = ps.subscribe('cartUpdate', function (msg, items) {
-			//self.handleCartUpdate(items);
-		});
-	},
-	componentWillUnmount: function () {
-		ps.unsubscribe(this.cartUpdate);
-	},
 	handleSubmit: function (e) {
-		var self = this;
 		e.preventDefault();
-		console.log('submit!', e);
 		$.ajax({
 			url: '/pay',
 			type: 'POST',
@@ -52,9 +41,8 @@ module.exports = React.createClass({
 				lastName: $(e.target).find('input[name=lastName]').val()},
 			cache: false,
 			success: function (data) {
-				console.log('data', data);
 				delete store.cart;
-				self.setState(data.cart);
+				this.setState(data.cart);
 				ps.publish('cartUpdate', data.cart);
 			}.bind(this),
 			error: function (xhr, status, err) {
@@ -65,8 +53,6 @@ module.exports = React.createClass({
 	render: function render() {
 		var csrf = this.props._csrf;
 		var msgs = this.props.messages.cart;
-		var self = this;
-		console.log('cart', this.state);
 		if (!this.state.items) {
 			return (
 			  <main role="main">
@@ -97,7 +83,7 @@ module.exports = React.createClass({
 			  <div className="ccForm inline">
 				  <h3>Total: {this.state.total}</h3>
 				  <fieldset>
-					  <form method="post" onSubmit={self.handleSubmit}>
+					  <form method="post" onSubmit={this.handleSubmit}>
 						  <input name="cc" placeholder="CC #" defaultValue="4532649989162709" maxLength="16"/><br/>
 						  <input name="expMonth" placeholder="MM" defaultValue="12" maxLength="2" size="2"/>
 						  <input name="expYear" placeholder="YYYY" defaultValue="2018" maxLength="4" size="4"/>

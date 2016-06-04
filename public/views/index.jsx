@@ -24,16 +24,14 @@ module.exports = React.createClass({
 		return store && store.products && {products: store.products} || {products: this.props.products};
 	},
 	componentDidMount: function () {
-		var self = this;
 		this.productUpdate = ps.subscribe('productUpdate', function (msg, cart) {
-			self.setState({products: store.products});
-		});
+			this.setState({products: store.products});
+		}.bind(this));
 	},
 	componentWillUnmount: function () {
 		ps.unsubscribe(this.productUpdate);
 	},
 	handleSubmit: function (e) {
-		var self = this;
 		e.preventDefault();
 		console.log('submit!', e);
 		$.ajax({
@@ -58,7 +56,6 @@ module.exports = React.createClass({
 	render: function render() {
 		var msgs = this.props.messages.index;
 		var products = this.state.products;
-		var self = this;
 		return (
 		  <main role="main" >
 			  <p>{msgs.greeting}</p>
@@ -70,14 +67,14 @@ module.exports = React.createClass({
 						  return (
 							<li key={product._id}>
 								<form method="POST" action="cart" data-productid={product._id}
-									  onSubmit={self.handleSubmit}>
+									  onSubmit={this.handleSubmit}>
 									<h3 className="nm-np">{product.name}</h3>
 									<h4 className="nm-np">{product.prettyPrice}</h4>
 									<input type="submit" value={msgs.addToCart}/>
 								</form>
 							</li>
 						  );
-					  }) : <li>{msgs.noProducts}</li>
+					  }.bind(this)) : <li>{msgs.noProducts}</li>
 				  }</ul>
 			  </div>
 		  </main>
