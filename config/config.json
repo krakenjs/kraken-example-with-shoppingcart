@@ -48,15 +48,6 @@
                 "name": "path:./lib/methodOverride"
             }
         },
-//        "router": {
-//            "module": {
-//                "arguments": [
-//                    {
-//                        "index": "path:./routes"
-//                    }
-//                ]
-//            }
-//        },
         "locale": {
             "priority": 95,
             "enabled": true,
