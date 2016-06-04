@@ -20,12 +20,10 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
-var browserHistory = ReactRouter.browserHistory;
 
 var Layout = require('./public/views/layout.jsx');
 var Index = require('./public/views/index.jsx');
 var Cart = require('./public/views/cart.jsx');
-var Result = require('./public/views/result.jsx');
 var Products = require('./public/views/products.jsx');
 
 var routes = module.exports = (
