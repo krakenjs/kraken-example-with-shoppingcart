@@ -160,13 +160,28 @@ locale is set into the response via the locale middleware defined in `lib/locale
 
 ### Localized model data with bundalo
 
-config changes (config.json):
-```javascript
-"bundle engine": "dust",
+bundalo is used to provide localized messages directly in server responses. The bundle middleware, `lib/getBundle.js`, 
+attaches a `bundle` property to the response object.
+
+```js
+bundle.get({'bundle': 'messages', 'locality': locality}, function bundleReturn(err, messages) {
+		if (err) {
+			console.error(err && err.stack || err);
+			return next(err);
+		}
+		res.bundle = intl(messages);
+		next();
+	});
 ```
 
-bundle is configured as middleware directly in routes where it is required, as in `controllers/cart/index.js` and `controllers/pay/index.js`
+Note the line `res.bundle = intl(messages);`. `intl` is a local method (utilizing [intl-messageformat](https://www.npmjs.com/package/intl-messageformat)) 
+that adds an additional getter to the existing bundalo API. 
+You can see that in use in `controllers/index.js`:
 
-bundle middleware defined in `lib/getBundle.js`. Note that the 'bundle' object is attached to the response object for use in the downstream response handlers
+```js
+model.itemsInCart = res.bundle.getIntl('items', {cartItemLength: cartLength});
+//combines the given model with the property from messages.properties:
+//items=You have {cartItemLength} items in your cart.
+```
 
-Server included localized content can be seen after payment, and also on the cart page.
+This combines the property with the given model. `intl-messageformat` can transform the model data based on the user's locale if necessary.
