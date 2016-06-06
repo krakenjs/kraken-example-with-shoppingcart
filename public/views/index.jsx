@@ -17,44 +17,29 @@
 
 var React = require('react');
 var $ = require('jquery');
-var ps = require('pubsub-js');
-var store = require('../store');
 var Store = require('../js/store');
 module.exports = React.createClass({
 	getInitialState: function () {
-		//return store && store.products && {products: store.products} || {products: this.props.products};
 		return {products: Store.getModel().products};
 	},
 	componentDidMount: function () {
 		Store.addListener('productChange', this.onChange);
+		Store.addListener('cartChange', this.onChange);
 	},
 	componentWillUnmount: function () {
 		Store.subtractListener('productChange', this.onChange);
+		Store.subtractListener('cartChange', this.onChange);
 	},
 	onChange: function () {
-		this.setState({products: Store.getModel().products});
+		this.setState(this.getInitialState());
 	},
-	handleSubmit: function (e) {
+	addToCart: function (e) {
 		e.preventDefault();
-		console.log('submit!', e);
-		$.ajax({
-			url: '/cart',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				_csrf: this.props._csrf,
-				item_id: $(e.target).data('productid')
-			},
-			cache: false,
-			success: function (data) {
-				console.log('data', data);
-				store.cart = data.cart;
-				ps.publish('cartUpdate', data.cart);
-			}.bind(this),
-			error: function (xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
-			}.bind(this)
-		});
+		var productObject = {
+			item_id: $(e.target).data('productid'),
+			_csrf: this.props._csrf
+		};
+		this.props.route.onAddToCart(productObject);
 	},
 	render: function render() {
 		var msgs = this.props.messages.index;
@@ -70,7 +55,7 @@ module.exports = React.createClass({
 						  return (
 							<li key={product._id}>
 								<form method="POST" action="cart" data-productid={product._id}
-									  onSubmit={this.handleSubmit}>
+									  onSubmit={this.addToCart}>
 									<h3 className="nm-np">{product.name}</h3>
 									<h4 className="nm-np">{product.prettyPrice}</h4>
 									<input type="submit" value={msgs.addToCart}/>

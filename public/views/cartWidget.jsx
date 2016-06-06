@@ -16,24 +16,24 @@
 'use strict';
 
 var React = require('react');
-var ps = require('pubsub-js');
+var Store = require('../js/store');
 
 
 module.exports = React.createClass({
-    handleCartUpdate: function (cart) {
-        this.setState({totalItems: cart.totalItems});
+    onCart: function () {
+        this.setState(this.getInitialState());
     },
     getInitialState: function () {
-        //setInterval(this.handleCartUpdate, 1000);
-        return {totalItems: this.props.cart && this.props.cart.totalItems};
+        var cartModel = Store.getModel().cart;
+        return {totalItems: cartModel && cartModel.totalItems};
     },
     componentDidMount: function () {
-        ps.subscribe('cartUpdate', function (msg, cart) {
-            this.handleCartUpdate(cart);
-        }.bind(this));
+        Store.addListener('cartChange', this.onCart);
+    },
+    componentWillUnmount: function () {
+        Store.subtractListener('cartChange', this.onCart);
     },
     render: function render() {
-        //var totalItems = this.props.totalItems;
         return (<span className='cartCounter'>{this.state.totalItems}</span>);
     }
 });

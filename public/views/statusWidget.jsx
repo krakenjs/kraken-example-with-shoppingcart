@@ -16,21 +16,25 @@
 'use strict';
 
 var React = require('react');
-var ps = require('pubsub-js');
+var Store = require('../js/store');
 
 module.exports = React.createClass({
 	getInitialState: function () {
 		return {requestInProgress: false};
 	},
+	onPaymentInit: function () {
+		this.setState({requestInProgress: true, progressMessage: this.props.messages.messages.paymentInProgress});
+	},
+	onPaymentComplete: function () {
+		this.setState({requestInProgress: false, progressMessage: ''});
+	},
 	componentDidMount: function () {
-		ps.subscribe('startRequest', function (msg, evt) {
-			console.log('startRequest', evt.message);
-			this.setState({requestInProgress: true, progressMessage: evt.message});
-		}.bind(this));
-		ps.subscribe('endRequest', function (msg, evt) {
-			console.log('endRequest', evt.message);
-			this.setState({requestInProgress: false, progressMessage: evt.message});
-		}.bind(this));
+		Store.addListener('paymentInit', this.onPaymentInit);
+		Store.addListener('paymentComplete', this.onPaymentComplete);
+	},
+	componentWillUnmount: function () {
+		Store.subtractListener('paymentInit', this.onPaymentInit);
+		Store.subtractListener('paymentComplete', this.onPaymentComplete);
 	},
 	render: function render() {
 		if (this.state.requestInProgress) {

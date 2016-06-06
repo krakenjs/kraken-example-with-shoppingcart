@@ -18,40 +18,34 @@
 var React = require('react');
 var Router = require('react-router');
 
-var ps = require('pubsub-js');
-var store = require('../store');
+var Store = require('../js/store');
+
 var $ = require('jquery');
 
 module.exports = React.createClass({
 	getInitialState: function () {
-		return store && store.cart || this.props.cart;
+		return Store.getModel().cart;
 	},
-	handleSubmit: function (e) {
+	componentDidMount: function () {
+		Store.addListener('cartChange', this.onCart);
+	},
+	componentWillUnmount: function () {
+		Store.subtractListener('cartChange', this.onCart);
+	},
+	onCart: function () {
+		this.setState(this.getInitialState());
+	},
+	pay: function (e) {
 		e.preventDefault();
-		ps.publish('startRequest', {message: 'Payment in progress'});
-		$.ajax({
-			url: '/pay',
-			type: 'POST',
-			dataType: 'json',
-			data: {
-				_csrf: this.props._csrf,
-				cc: $(e.target).find('input[name=cc]').val(),
-				expMonth: $(e.target).find('input[name=expMonth]').val(),
-				expYear: $(e.target).find('input[name=expYear]').val(),
-				firstName: $(e.target).find('input[name=firstName]').val(),
-				lastName: $(e.target).find('input[name=lastName]').val()},
-			cache: false,
-			success: function (data) {
-				delete store.cart;
-				this.setState(data.cart);
-				ps.publish('cartUpdate', data.cart);
-				ps.publish('endRequest', {message: 'Payment complete'});
-
-			}.bind(this),
-			error: function (xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
-			}.bind(this)
-		});
+		var payInfo = {
+			  _csrf: this.props._csrf,
+			  cc: $(e.target).find('input[name=cc]').val(),
+			  expMonth: $(e.target).find('input[name=expMonth]').val(),
+			  expYear: $(e.target).find('input[name=expYear]').val(),
+			  firstName: $(e.target).find('input[name=firstName]').val(),
+			  lastName: $(e.target).find('input[name=lastName]').val()
+		};
+		this.props.route.onPay(payInfo);
 	},
 	render: function render() {
 		var csrf = this.props._csrf;
@@ -86,7 +80,7 @@ module.exports = React.createClass({
 			  <div className="ccForm inline">
 				  <h3>Total: {this.state.total}</h3>
 				  <fieldset>
-					  <form method="post" onSubmit={this.handleSubmit}>
+					  <form method="post" onSubmit={this.pay}>
 						  <input name="cc" placeholder="CC #" defaultValue="4532649989162709" maxLength="16"/><br/>
 						  <input name="expMonth" placeholder="MM" defaultValue="12" maxLength="2" size="2"/>
 						  <input name="expYear" placeholder="YYYY" defaultValue="2018" maxLength="4" size="4"/>

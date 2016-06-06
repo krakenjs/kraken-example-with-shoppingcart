@@ -10,20 +10,16 @@ function createProduct(productObject, callback) {
 		url: '/products',
 		type: 'POST',
 		dataType: 'json',
-		data: {
-			_csrf: productObject._csrf,
-			name: productObject.name,
-			price: productObject.price
-		},
+		data: productObject,
 		cache: false,
 		success: function (data) {
 			console.log('data', data);
 			_model.products = data.products;
 			callback();
-		}.bind(this),
+		},
 		error: function (xhr, status, err) {
-			console.error(this.props.url, status, err.toString());
-		}.bind(this)
+			console.error(err.toString());
+		}
 	});
 }
 function deleteProduct(productObject, callback) {
@@ -31,21 +27,51 @@ function deleteProduct(productObject, callback) {
 		url: '/products',
 		type: 'POST',
 		dataType: 'json',
-		data: {
-			_csrf: productObject._csrf,
-			_method: 'DELETE',
-			item_id: productObject.item_id,
-			price: productObject.price
-		},
+		data: productObject,
 		cache: false,
 		success: function (data) {
 			console.log('data', data);
 			_model.products = data.products;
 			callback();
-		}.bind(this),
+		},
 		error: function (xhr, status, err) {
-			console.error(this.props.url, status, err.toString());
-		}.bind(this)
+			console.error(err.toString());
+		}
+	});
+}
+
+function addToCart(productObject, callback) {
+	$.ajax({
+		url: '/cart',
+		type: 'POST',
+		dataType: 'json',
+		data: productObject,
+		cache: false,
+		success: function (data) {
+			_model.cart = data.cart;
+			callback();
+		},
+		error: function (xhr, status, err) {
+			console.error(err.toString());
+		}
+	});
+}
+
+function initiatePayment(payInfoObject, callback) {
+	$.ajax({
+		url: '/pay',
+		type: 'POST',
+		dataType: 'json',
+		data: payInfoObject,
+		cache: false,
+		success: function (data) {
+			_model.cart = data.cart;
+			callback();
+
+		},
+		error: function (xhr, status, err) {
+			console.error(err.toString());
+		}
 	});
 }
 var Store = assign({}, EventEmitter.prototype, {
@@ -55,8 +81,9 @@ var Store = assign({}, EventEmitter.prototype, {
 	setModel: function (model) {
 		_model = model;
 	},
-	emitter: function (evt) {
-		this.emit(evt);
+	emitter: function (evt, payload) {
+		payload = payload || {};
+		this.emit(evt, payload);
 	},
 	/**
 	 * @param {function} callback
@@ -88,43 +115,18 @@ Dispatcher.register(function (action) {
 				Store.emitter('productChange');
 			});
 			break;
-		//case 'deleteProduct':
-		//	if (TodoStore.areAllComplete()) {
-		//		updateAll({complete: false});
-		//	} else {
-		//		updateAll({complete: true});
-		//	}
-		//	TodoStore.emitChange();
-		//	break;
-
-		//case TodoConstants.TODO_UNDO_COMPLETE:
-		//	update(action.id, {complete: false});
-		//	TodoStore.emitChange();
-		//	break;
-		//
-		//case TodoConstants.TODO_COMPLETE:
-		//	update(action.id, {complete: true});
-		//	TodoStore.emitChange();
-		//	break;
-		//
-		//case TodoConstants.TODO_UPDATE_TEXT:
-		//	text = action.text.trim();
-		//	if (text !== '') {
-		//		update(action.id, {text: text});
-		//		TodoStore.emitChange();
-		//	}
-		//	break;
-		//
-		//case TodoConstants.TODO_DESTROY:
-		//	destroy(action.id);
-		//	TodoStore.emitChange();
-		//	break;
-		//
-		//case TodoConstants.TODO_DESTROY_COMPLETED:
-		//	destroyCompleted();
-		//	TodoStore.emitChange();
-		//	break;
-
+		case Constants.CART_ADD:
+			addToCart(action.product, function () {
+				Store.emitter('cartChange');
+			});
+			break;
+		case Constants.PAYMENT_INITIATE:
+		  	Store.emitter('paymentInit');
+			initiatePayment(action.payInfo, function () {
+				Store.emitter('paymentComplete');
+				Store.emitter('cartChange');
+			});
+			break;
 		default:
 		// no op
 	}

@@ -35,11 +35,19 @@ var ondelete = function(product) {
 	console.log('delete product', product);
 	Actions.deleteProduct(product);
 };
+var onaddtocart = function(product) {
+	console.log('add product to cart', product);
+	Actions.addToCart(product);
+};
+var initiatepayment = function (payInfo) {
+	console.log('initiate payment', payInfo);
+	Actions.initiatePayment(payInfo);
+};
 var routes = module.exports = (
   <Router>
 	  <Route path='/' component={Layout}>
-		  <IndexRoute component={Index} />
-		  <Route path='/cart' component={Cart} />
+		  <IndexRoute onAddToCart={onaddtocart} component={Index} />
+		  <Route onPay={initiatepayment} path='/cart' component={Cart} />
 		  <Route onSave={onsave} onDelete={ondelete} path='/products' component={Products} />
 	  </Route>
   </Router>

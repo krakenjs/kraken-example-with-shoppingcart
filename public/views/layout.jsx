@@ -41,7 +41,7 @@ module.exports = React.createClass({
 			  <script src='/bundle.js'></script>
 		  </head>
 		  <body className='nm-np'>
-		  <StatusWidget/>
+		  <StatusWidget {...this.props}/>
 		  <header className='grey'>
 			  <div className='wrapper'>
 				  <h1>{msgs.storeName}</h1>

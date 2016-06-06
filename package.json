@@ -54,12 +54,10 @@
     "node-jsx": "^0.13.3",
     "object-assign": "^4.1.0",
     "paypal-rest-sdk": "^1.5.2",
-    "pubsub-js": "^1.5.3",
     "react": "^15.1.0",
     "react-engine": "^3.3.0",
     "react-router": "^2.4.1",
-    "spundle": "^1.0.3",
-    "webpack": "^1.13.1"
+    "spundle": "^1.0.3"
   },
   "devDependencies": {
     "construx": "^1.0.0",
