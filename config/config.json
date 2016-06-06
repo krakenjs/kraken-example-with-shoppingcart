@@ -59,7 +59,7 @@
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "anemone",
+                "name": "anemone-lingua",
                 "arguments": [
                     {
                         "contentPath": "path:./locales",
