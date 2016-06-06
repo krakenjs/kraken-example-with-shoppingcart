@@ -1,6 +1,6 @@
-# with.shoppingcart
+# kraken-example-with-shoppingcart
 
-Kraken with Shopping Cart and PayPal integration
+Kraken with Shopping Cart, universal react view rendering, and PayPal integration
 
 ## Prerequisites
 * This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
@@ -23,7 +23,7 @@ Visit [`http://localhost:8000`](http://localhost:8000)
 
 ## Illustrates
 
-* [`anemone-machina`](https://www.npmjs.com/package/anemone-machina) and for isomorphic react view rendering
+* [`anemone-machina`](https://www.npmjs.com/package/anemone-machina) and for universal react view rendering
 * [`anemone-lingua`](https://www.npmjs.com/package/anemone-lingua) for localized content (en-US or es-ES) from .properties files
 * [`react-router`](https://www.npmjs.com/package/react-router) for URL/view mapping
 * [`flux`](https://www.npmjs.com/package/flux) to manage the application lifecycle and architecture
@@ -33,6 +33,8 @@ Visit [`http://localhost:8000`](http://localhost:8000)
 * Integration with the PayPal SDK
 
 ### React components
+
+krakenjs (PayPal's JavaScript open source umbrella) has namespaced important react-related modules under the `anemone` namespace.
 
 #### anemone-machina
 
