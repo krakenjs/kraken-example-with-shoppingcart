@@ -25,13 +25,22 @@ var Layout = require('./public/views/layout.jsx');
 var Index = require('./public/views/index.jsx');
 var Cart = require('./public/views/cart.jsx');
 var Products = require('./public/views/products.jsx');
+var Actions = require('./public/js/actions');
 
+var onsave = function(product) {
+	console.log('new product', product);
+	Actions.addProduct(product);
+};
+var ondelete = function(product) {
+	console.log('delete product', product);
+	Actions.deleteProduct(product);
+};
 var routes = module.exports = (
   <Router>
 	  <Route path='/' component={Layout}>
 		  <IndexRoute component={Index} />
 		  <Route path='/cart' component={Cart} />
-		  <Route path='/products' component={Products} />
+		  <Route onSave={onsave} onDelete={ondelete} path='/products' component={Products} />
 	  </Route>
   </Router>
 );

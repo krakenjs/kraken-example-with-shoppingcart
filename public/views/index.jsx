@@ -19,17 +19,20 @@ var React = require('react');
 var $ = require('jquery');
 var ps = require('pubsub-js');
 var store = require('../store');
+var Store = require('../js/store');
 module.exports = React.createClass({
 	getInitialState: function () {
-		return store && store.products && {products: store.products} || {products: this.props.products};
+		//return store && store.products && {products: store.products} || {products: this.props.products};
+		return {products: Store.getModel().products};
 	},
 	componentDidMount: function () {
-		this.productUpdate = ps.subscribe('productUpdate', function (msg, cart) {
-			this.setState({products: store.products});
-		}.bind(this));
+		Store.addListener('productChange', this.onChange);
 	},
 	componentWillUnmount: function () {
-		ps.unsubscribe(this.productUpdate);
+		Store.subtractListener('productChange', this.onChange);
+	},
+	onChange: function () {
+		this.setState({products: Store.getModel().products});
 	},
 	handleSubmit: function (e) {
 		e.preventDefault();

@@ -19,8 +19,17 @@ var React = require('react');
 var CartWidget = require('./cartWidget.jsx');
 var StatusWidget = require('./statusWidget.jsx');
 var Router = require('react-router');
+var Store = require('../js/store');
 
 module.exports = React.createClass({
+	componentWillMount: function () {
+		//get initial data into Store
+		var model = {
+			products: this.props.products,
+			cart: this.props.cart
+		};
+		Store.setModel(model);
+	},
 	render: function render() {
 		var msgs = this.props.messages['layouts/master'];
 		return (
