@@ -17,7 +17,7 @@
 'use strict';
 
 var Routes = require('../routes.jsx');
-var Client = require('react-engine/lib/client');
+var Client = require('anemone-machina/lib/client');
 
 // Include all view files. Browserify doesn't do
 // this automatically as it can only operate on

@@ -1,13 +1,13 @@
 {
     "express": {
         "view engine": "jsx",
-        "view": "require:react-engine/lib/expressView",
+        "view": "require:anemone-machina/lib/expressView",
         "view cache": false,
         "views": "path:./public/views"
     },
     "view engines": {
         "jsx": {
-            "module": "react-engine/lib/server",
+            "module": "anemone-machina/lib/server",
             "renderer": {
                 "method": "create",
                 "arguments": [

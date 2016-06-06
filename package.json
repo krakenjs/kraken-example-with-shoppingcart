@@ -32,7 +32,8 @@
   "license": "Apache 2.0",
   "homepage": "http://krakenjs.com/",
   "dependencies": {
-    "anemone": "^1.0.0",
+    "anemone-lingua": "~0.0.1",
+    "anemone-machina": "~0.0.1",
     "async": "^2.0.0-rc.5",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
@@ -55,7 +56,6 @@
     "object-assign": "^4.1.0",
     "paypal-rest-sdk": "^1.5.2",
     "react": "^15.1.0",
-    "react-engine": "^3.3.0",
     "react-router": "^2.4.1",
     "spundle": "^1.0.3"
   },
