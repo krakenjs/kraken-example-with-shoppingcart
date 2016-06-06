@@ -23,18 +23,85 @@ Visit [`http://localhost:8000`](http://localhost:8000)
 
 ## Illustrates
 
-* Use of mongodb for storing product information
+* [`anemone-machina`](https://www.npmjs.com/package/anemone-machina) and for isomorphic react view rendering
+* [`anemone-lingua`](https://www.npmjs.com/package/anemone-lingua) for localized content (en-US or es-ES) from .properties files
+* [`react-router`](https://www.npmjs.com/package/react-router) for URL/view mapping
+* [`flux`](https://www.npmjs.com/package/flux) to manage the application lifecycle and architecture
+* ['browserify`](https://www.npmjs.com/package/browserify) for browser JavaScript dependency management
+* [`bundalo`](https://www.npmjs.com/package/bundalo) for localized messages with model data
+* mongodb for storing product information
 * Integration with the PayPal SDK
-* Localized content (en-US or es-ES)
-* Usage of bundalo for localized messages with model data
 
-### lib/spec.js
+### React components
 
-`lib/spec.js` holds the `onconfig` event handler. You can see in the main `index.js` file, `lib/spec`'s onconfig handler is passed in with the line: 
+#### anemone-machina
 
-```javascript
-app.use(kraken(options))
+The example utilizes `anemone-machina` for rendering views on both the client and server (as an express view engine).
+
+The express view engine is configured in `config/config.json` in this block:
+
+```js
+    "express": {
+        "view engine": "jsx",
+        "view": "require:anemone-machina/lib/expressView",
+        "view cache": false,
+        "views": "path:./public/views"
+    },
+    "view engines": {
+        "jsx": {
+            "module": "anemone-machina/lib/server",
+            "renderer": {
+                "method": "create",
+                "arguments": [
+                    {
+                        "routes": "require:./routes.jsx",
+                        "routesFilePath": "path:./routes.jsx"
+                    }
+                ]
+            }
+        }
+    },
 ```
+
+#### anenome-lingua
+
+Configured as a middleware in `config/config.json`:
+
+```js
+        "reactContentLoader": {
+            "priority": 100,
+            "enabled": true,
+            "module": {
+                "name": "anemone-lingua",
+                "arguments": [
+                    {
+                        "contentPath": "path:./locales",
+                        "fallback": "en-US"
+                    }
+                ]
+            }
+        }
+```
+
+#### react-router
+
+Please see `routes.jsx` for the Router definition. You can see server-rendered views by making a direct get request for any of:
+- `/`
+- `/products`
+- `/cart`
+
+When the application is loaded in the browser, clicking any of the main navigation links will illustrate browser-rendered views.
+
+#### flux
+
+The flux-based patterns can be found in the files under `public/js/*.js`. You can also see the flux listeners pushed down from the `routes.jsx` file.
+
+#### browserify
+
+- The browserify bundle.js build is defined in `Gruntfile.js` as well as `tasks/browserify.js`.
+- The development hot-loader [`construx-browserify`](https://www.npmjs.com/package/react-router) for the bundle is configured in `config/development.json`
+- The above block also specifies `routes.jsx` as this application makes use of [`react-router`](https://www.npmjs.com/package/react-router).
+- The browser react renderer is configured in `public/main.js`
 
 ### mongodb
 
