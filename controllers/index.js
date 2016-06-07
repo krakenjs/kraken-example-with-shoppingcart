@@ -72,7 +72,6 @@ var modelBuilder = function (req, res, callback) {
 				products: prods,
 				title: 'Kraken Store'
 			};
-			//console.log('model', model);
 			callback(null, model);
 		});
 	};
@@ -81,7 +80,6 @@ var modelBuilder = function (req, res, callback) {
 
 		model.products = result.products.products;
 		model.cart = result.cart;
-		//console.log('model', model);
 		callback(null, model);
 	});
 }
