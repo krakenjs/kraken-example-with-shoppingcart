@@ -1,8 +1,5 @@
 {
-
-
     "middleware": {
-
         "devtools": {
             "enabled": true,
             "priority": 35,
@@ -12,13 +9,25 @@
                     "path:./public",
                     "path:./.build",
                     {
-                        "copier": {
-                            "module": "construx-copier",
-                            "files": "**/*"
+                        "browserify": {
+                            "module": "construx-browserify",
+                            "files": "**/*.js",
+                            "bundles": {
+                                "/bundle.js": {
+                                    "src": "path:./public/main.js",
+                                    "options": {
+                                        "transform": ["reactify", "require-globify"]
+                                    }
+                                }
+                            }
                         },
                         "css": {
                             "module": "construx-less",
                             "files": "/css/**/*.css"
+                        },
+                        "copier": {
+                            "module": "construx-copier",
+                            "files": "**/*"
                         }
                     }
                 ]

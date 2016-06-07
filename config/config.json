@@ -1,16 +1,21 @@
 {
     "express": {
         "view engine": "jsx",
-        "view": "require:react-engine/lib/expressView",
+        "view": "require:anemone-machina/lib/expressView",
         "view cache": false,
         "views": "path:./public/views"
     },
-
     "view engines": {
         "jsx": {
-            "module": "react-engine/lib/server",
+            "module": "anemone-machina/lib/server",
             "renderer": {
-                "method": "create"
+                "method": "create",
+                "arguments": [
+                    {
+                        "routes": "require:./routes.jsx",
+                        "routesFilePath": "path:./routes.jsx"
+                    }
+                ]
             }
         }
     },
@@ -22,7 +27,6 @@
         "host": "localhost",
         "database": "shocart"
     },
-
     "paypalConfig": {
         "host": "api.sandbox.paypal.com",
         "port": "",
@@ -30,10 +34,11 @@
         "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM"
     },
     "middleware": {
-
         "static": {
             "module": {
-                "arguments": [ "path:./.build" ]
+                "arguments": [
+                    "path:./.build"
+                ]
             }
         },
         "methodOverride": {
@@ -41,11 +46,6 @@
             "enabled": true,
             "module": {
                 "name": "path:./lib/methodOverride"
-            }
-        },
-        "router": {
-            "module": {
-                "arguments": [{ "directory": "path:./controllers" }]
             }
         },
         "locale": {
@@ -59,14 +59,14 @@
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "anemone",
-                "arguments": [{
-                    "contentPath": "path:./locales",
-                    "fallback": "en-US"
-                }]
+                "name": "anemone-lingua",
+                "arguments": [
+                    {
+                        "contentPath": "path:./locales",
+                        "fallback": "en-US"
+                    }
+                ]
             }
         }
-
     }
-
 }

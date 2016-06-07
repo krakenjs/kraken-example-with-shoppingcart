@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------*\
- |  Copyright (C) 2015 PayPal                                                                                          |
+ |  Copyright (C) 2016 PayPal                                                                                          |
  |                                                                                                                     |
  |  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance     |
  |  with the License.                                                                                                  |
@@ -15,20 +15,40 @@
 
 'use strict';
 
-var Layout = require('./layout.jsx');
 var React = require('react');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var IndexRoute = ReactRouter.IndexRoute;
 
+var Layout = require('./public/views/layout.jsx');
+var Index = require('./public/views/index.jsx');
+var Cart = require('./public/views/cart.jsx');
+var Products = require('./public/views/products.jsx');
+var Actions = require('./public/js/actions');
 
-module.exports = React.createClass({
-
-    render: function render() {
-        return (
-          <Layout {...this.props}>
-              <main role="main">
-                  {this.props.result}
-                  <h3><a href="/">{this.props.continueMessage}</a></h3>
-              </main>
-          </Layout>
-        );
-    }
-});
+var onsave = function(product) {
+	console.log('new product', product);
+	Actions.addProduct(product);
+};
+var ondelete = function(product) {
+	console.log('delete product', product);
+	Actions.deleteProduct(product);
+};
+var onaddtocart = function(product) {
+	console.log('add product to cart', product);
+	Actions.addToCart(product);
+};
+var initiatepayment = function (payInfo) {
+	console.log('initiate payment', payInfo);
+	Actions.initiatePayment(payInfo);
+};
+var routes = module.exports = (
+  <Router>
+	  <Route path='/' component={Layout}>
+		  <IndexRoute onAddToCart={onaddtocart} component={Index} />
+		  <Route onPay={initiatepayment} path='/cart' component={Cart} />
+		  <Route onSave={onsave} onDelete={ondelete} path='/products' component={Products} />
+	  </Route>
+  </Router>
+);

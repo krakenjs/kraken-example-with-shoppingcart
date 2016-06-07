@@ -13,59 +13,35 @@
  |  the specific language governing permissions and limitations under the License.                                     |
  \*-------------------------------------------------------------------------------------------------------------------*/
 
-'use strict';
+var Dispatcher = require('./dispatcher');
+var Constants = require('./constants');
+var Actions = {
 
-var React = require('react');
-var $ = require('jquery');
-var Store = require('../js/store');
-module.exports = React.createClass({
-	getInitialState: function () {
-		return {products: Store.getModel().products};
+	addProduct: function(product) {
+		Dispatcher.dispatch({
+			actionType: Constants.PRODUCT_CREATE,
+			product: product
+		});
 	},
-	componentDidMount: function () {
-		Store.addListener('productChange', this.onChange);
-		Store.addListener('cartChange', this.onChange);
+	deleteProduct: function(product) {
+		Dispatcher.dispatch({
+			actionType: Constants.PRODUCT_DELETE,
+			product: product
+		});
 	},
-	componentWillUnmount: function () {
-		Store.subtractListener('productChange', this.onChange);
-		Store.subtractListener('cartChange', this.onChange);
+	addToCart: function(product) {
+		Dispatcher.dispatch({
+			actionType: Constants.CART_ADD,
+			product: product
+		});
 	},
-	onChange: function () {
-		this.setState(this.getInitialState());
-	},
-	addToCart: function (e) {
-		e.preventDefault();
-		var productObject = {
-			item_id: $(e.target).data('productid'),
-			_csrf: this.props._csrf
-		};
-		this.props.route.onAddToCart(productObject);
-	},
-	render: function render() {
-		var msgs = this.props.messages.index;
-		var products = this.state.products;
-		return (
-		  <main role="main" >
-			  <p>{msgs.greeting}</p>
-
-			  <div className="products">
-				  <ul className="nm-np inline">{
-					  (products && products.length > 0) ? products.map(function (product) {
-						  console.log('product', product);
-						  return (
-							<li key={product._id}>
-								<form method="POST" action="cart" data-productid={product._id}
-									  onSubmit={this.addToCart}>
-									<h3 className="nm-np">{product.name}</h3>
-									<h4 className="nm-np">{product.prettyPrice}</h4>
-									<input type="submit" value={msgs.addToCart}/>
-								</form>
-							</li>
-						  );
-					  }.bind(this)) : <li>{msgs.noProducts}</li>
-				  }</ul>
-			  </div>
-		  </main>
-		);
+	initiatePayment: function(payInfo) {
+		Dispatcher.dispatch({
+			actionType: Constants.PAYMENT_INITIATE,
+			payInfo: payInfo
+		});
 	}
-});
+
+};
+
+module.exports = Actions;

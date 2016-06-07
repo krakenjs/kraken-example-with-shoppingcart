@@ -1,6 +1,6 @@
-# with.shoppingcart
+# kraken-example-with-shoppingcart
 
-Kraken with Shopping Cart and PayPal integration
+Kraken with Shopping Cart, universal react view rendering, and PayPal integration
 
 ## Prerequisites
 * This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
@@ -23,18 +23,87 @@ Visit [`http://localhost:8000`](http://localhost:8000)
 
 ## Illustrates
 
-* Use of mongodb for storing product information
+* [`anemone-machina`](https://www.npmjs.com/package/anemone-machina) and for universal react view rendering
+* [`anemone-lingua`](https://www.npmjs.com/package/anemone-lingua) for localized content (en-US or es-ES) from .properties files
+* [`react-router`](https://www.npmjs.com/package/react-router) for URL/view mapping
+* [`flux`](https://www.npmjs.com/package/flux) to manage the application lifecycle and architecture
+* ['browserify`](https://www.npmjs.com/package/browserify) for browser JavaScript dependency management
+* [`bundalo`](https://www.npmjs.com/package/bundalo) for localized messages with model data
+* mongodb for storing product information
 * Integration with the PayPal SDK
-* Localized content (en-US or es-ES)
-* Usage of bundalo for localized messages with model data
 
-### lib/spec.js
+### React components
 
-`lib/spec.js` holds the `onconfig` event handler. You can see in the main `index.js` file, `lib/spec`'s onconfig handler is passed in with the line: 
+krakenjs (PayPal's JavaScript open source umbrella) has namespaced important react-related modules under the `anemone` namespace.
 
-```javascript
-app.use(kraken(options))
+#### anemone-machina
+
+The example utilizes `anemone-machina` for rendering views on both the client and server (as an express view engine).
+
+The express view engine is configured in `config/config.json` in this block:
+
+```js
+    "express": {
+        "view engine": "jsx",
+        "view": "require:anemone-machina/lib/expressView",
+        "view cache": false,
+        "views": "path:./public/views"
+    },
+    "view engines": {
+        "jsx": {
+            "module": "anemone-machina/lib/server",
+            "renderer": {
+                "method": "create",
+                "arguments": [
+                    {
+                        "routes": "require:./routes.jsx",
+                        "routesFilePath": "path:./routes.jsx"
+                    }
+                ]
+            }
+        }
+    },
 ```
+
+#### anenome-lingua
+
+Configured as a middleware in `config/config.json`:
+
+```js
+        "reactContentLoader": {
+            "priority": 100,
+            "enabled": true,
+            "module": {
+                "name": "anemone-lingua",
+                "arguments": [
+                    {
+                        "contentPath": "path:./locales",
+                        "fallback": "en-US"
+                    }
+                ]
+            }
+        }
+```
+
+#### react-router
+
+Please see `routes.jsx` for the Router definition. You can see server-rendered views by making a direct get request for any of:
+- `/`
+- `/products`
+- `/cart`
+
+When the application is loaded in the browser, clicking any of the main navigation links will illustrate browser-rendered views.
+
+#### flux
+
+The flux-based patterns can be found in the files under `public/js/*.js`. You can also see the flux listeners pushed down from the `routes.jsx` file.
+
+#### browserify
+
+- The browserify bundle.js build is defined in `Gruntfile.js` as well as `tasks/browserify.js`.
+- The development hot-loader [`construx-browserify`](https://www.npmjs.com/package/react-router) for the bundle is configured in `config/development.json`
+- The above block also specifies `routes.jsx` as this application makes use of [`react-router`](https://www.npmjs.com/package/react-router).
+- The browser react renderer is configured in `public/main.js`
 
 ### mongodb
 
@@ -93,13 +162,28 @@ locale is set into the response via the locale middleware defined in `lib/locale
 
 ### Localized model data with bundalo
 
-config changes (config.json):
-```javascript
-"bundle engine": "dust",
+bundalo is used to provide localized messages directly in server responses. The bundle middleware, `lib/getBundle.js`, 
+attaches a `bundle` property to the response object.
+
+```js
+bundle.get({'bundle': 'messages', 'locality': locality}, function bundleReturn(err, messages) {
+		if (err) {
+			console.error(err && err.stack || err);
+			return next(err);
+		}
+		res.bundle = intl(messages);
+		next();
+	});
 ```
 
-bundle is configured as middleware directly in routes where it is required, as in `controllers/cart/index.js` and `controllers/pay/index.js`
+Note the line `res.bundle = intl(messages);`. `intl` is a local method (utilizing [intl-messageformat](https://www.npmjs.com/package/intl-messageformat)) 
+that adds an additional getter to the existing bundalo API. 
+You can see that in use in `controllers/index.js`:
 
-bundle middleware defined in `lib/getBundle.js`. Note that the 'bundle' object is attached to the response object for use in the downstream response handlers
+```js
+model.itemsInCart = res.bundle.getIntl('items', {cartItemLength: cartLength});
+//combines the given model with the property from messages.properties:
+//items=You have {cartItemLength} items in your cart.
+```
 
-Server included localized content can be seen after payment, and also on the cart page.
+This combines the property with the given model. `intl-messageformat` can transform the model data based on the user's locale if necessary.

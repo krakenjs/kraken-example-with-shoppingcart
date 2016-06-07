@@ -15,53 +15,87 @@
 
 'use strict';
 
-var Layout = require('./layout.jsx');
 var React = require('react');
+var Router = require('react-router');
 
+var Store = require('../js/store');
+
+var $ = require('jquery');
 
 module.exports = React.createClass({
+	getInitialState: function () {
+		return Store.getModel().cart;
+	},
+	componentDidMount: function () {
+		Store.addListener('cartChange', this.onCart);
+	},
+	componentWillUnmount: function () {
+		Store.subtractListener('cartChange', this.onCart);
+	},
+	onCart: function () {
+		this.setState(this.getInitialState());
+	},
+	pay: function (e) {
+		e.preventDefault();
+		var payInfo = {
+			  _csrf: this.props._csrf,
+			  cc: $(e.target).find('input[name=cc]').val(),
+			  expMonth: $(e.target).find('input[name=expMonth]').val(),
+			  expYear: $(e.target).find('input[name=expYear]').val(),
+			  firstName: $(e.target).find('input[name=firstName]').val(),
+			  lastName: $(e.target).find('input[name=lastName]').val()
+		};
+		this.props.route.onPay(payInfo);
+	},
+	render: function render() {
+		var csrf = this.props._csrf;
+		var msgs = this.props.messages.cart;
+		if (!this.state.items) {
+			return (
+			  <main role="main">
+				  <h2>{this.state.result}</h2>
+				  <Router.Link to='/'>{this.state.continueMessage}</Router.Link>
 
-    render: function render() {
-        var csrf = this.props._csrf;
-        var msgs = this.props.messages.cart;
-        return (
-          <Layout {...this.props}>
-              <main role="main">
-                  <div className="products mb2">
-                      <h2>{msgs.yourcart}</h2>
-                      <p>{this.props.itemsInCart}</p>
-                      <ul className="nm-np inline">
-                          {this.props.cart.items.map(function (item) {
-                              return (
-                                <li>
-                                    <h3 className="nm-np">{item.qty} x {item.name}</h3>
-                                    <h4 className="nm-np">{msgs.price}: {item.prettyPrice} {msgs.each}</h4>
-                                </li>
-                              );
-                          })}
-                      </ul>
-                  </div>
+			  </main>
+			)
+		}
+		return (
 
-                  <div className="ccForm inline">
-                      <h3>Total: ${this.props.cart.total}</h3>
-                      <fieldset>
-                          <form method="post" action="/pay">
-                              <input name="cc" placeholder="CC #" value="4532649989162709" maxlength="16"/><br/>
-                              <input name="expMonth" placeholder="MM" value="12" maxlength="2" size="2"/>
-                              <input name="expYear" placeholder="YYYY" value="2018" maxlength="4" size="4"/>
-                              <input name="cvv" placeholder="cvv" value="111" maxlength="4" size="4"/><br/>
-                              <input name="firstName" value="Ash" placeholder="First Name"/>
-                              <input name="lastName" value="Williams" placeholder="Last Name"/><br/>
-                              <input type="hidden" name="_csrf" value={csrf}/>
-                              <input type="submit" value={msgs.complete}/>
-                          </form>
-                      </fieldset>
-                  </div>
-                  <div>
-                      <p dangerouslySetInnerHTML={{__html: msgs.paypalNote}} />
-                  </div>
-              </main>
-          </Layout>
-        );
-    }
+		  <main role="main">
+			  <div className="products mb2">
+				  <h2>{msgs.yourcart}</h2>
+				  <p>{this.state.itemsInCart}</p>
+				  <ul className="nm-np inline">
+					  {this.state.items && this.state.items.items.map(function (item, idx) {
+						  return (
+							<li key={idx}>
+								<h3 className="nm-np">{item.qty} x {item.name}</h3>
+								<h4 className="nm-np">{msgs.price}: {item.prettyPrice} {msgs.each}</h4>
+							</li>
+						  );
+					  })}
+				  </ul>
+			  </div>
+
+			  <div className="ccForm inline">
+				  <h3>Total: {this.state.total}</h3>
+				  <fieldset>
+					  <form method="post" onSubmit={this.pay}>
+						  <input name="cc" placeholder="CC #" defaultValue="4532649989162709" maxLength="16"/><br/>
+						  <input name="expMonth" placeholder="MM" defaultValue="12" maxLength="2" size="2"/>
+						  <input name="expYear" placeholder="YYYY" defaultValue="2018" maxLength="4" size="4"/>
+						  <input name="cvv" placeholder="cvv" defaultValue="111" maxLength="4" size="4"/><br/>
+						  <input name="firstName" defaultValue="Ash" placeholder="First Name"/>
+						  <input name="lastName" defaultValue="Williams" placeholder="Last Name"/><br/>
+						  <input type="hidden" name="_csrf" defaultValue={csrf}/>
+						  <input type="submit" defaultValue={msgs.complete}/>
+					  </form>
+				  </fieldset>
+			  </div>
+			  <div>
+				  <p dangerouslySetInnerHTML={{__html: msgs.paypalNote}}/>
+			  </div>
+		  </main>
+		);
+	}
 });

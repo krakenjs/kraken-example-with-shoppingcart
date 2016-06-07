@@ -15,23 +15,26 @@
 
 'use strict';
 
-var Layout = require('./layout.jsx');
 var React = require('react');
-
+var $ = require('jquery');
+var Store = require('../js/store');
 
 module.exports = React.createClass({
+    getInitialState: function () {
+        return {products: Store.getModel().products};
+    },
     render: function render() {
         var msgs = this.props.messages.products;
         var csrf = this.props._csrf;
-        var products = this.props.products;
+        var products = this.state.products;
         return (
-          <Layout {...this.props}>
-              <h2>{msgs.title}</h2>
               <main role="main">
+                  <h2>{msgs.title}</h2>
                   <div className="mb2">
                       <fieldset>
                           <legend>{msgs.addProduct}</legend>
-                          <form method="POST" action="/products">
+                          <form method="POST" action="products"
+                                onSubmit={this.save}>
                               <input name="name" placeholder="Product Name"/><br />
                               <input name="price" placeholder="Price"/><br />
                               <input type="hidden" name="_csrf" value={csrf}/>
@@ -45,13 +48,15 @@ module.exports = React.createClass({
                           <legend>{msgs.productList}</legend>
                           <ul className="nm-np inline">
                               {(products && products.length > 0) ? products.map(function (product) {
+                                  console.log('product', product);
                                   return (
-                                    <li>
-                                      <form method="POST" action="/products">
-                                          <input type="hidden" name="item_id" value={product.id}/>
+                                    <li key={product.id || product._id}>
+                                        <form method="POST" action="products"
+                                              onSubmit={this.delete}>
+                                          <input type="hidden" name="item_id" value={product.id || product._id}/>
                                           <h3 className="nm-np">{product.name}</h3>
                                           <h4 className="nm-np">{product.prettyPrice}</h4>
-                                          <h5 className="nm-np tiny">{product.id}</h5>
+                                          <h5 className="nm-np tiny">{product.id || product._id}</h5>
                                           <input type="submit" value="Delete"/>
                                           {/*If we don't at the Cross-Site Request Forgey token, this POST will be rejected*/}
                                           <input type="hidden" name="_csrf" value={csrf}/>
@@ -59,12 +64,34 @@ module.exports = React.createClass({
                                       </form>
                                   </li>
                                   );
-                              }) : msgs.noProducts}
+                              }.bind(this)) : msgs.noProducts}
                           </ul>
                       </fieldset>
                   </div>
               </main>
-          </Layout>
         );
+    },
+    save: function(e) {
+        e.preventDefault();
+        var name = $(e.target).find('input[name=name]').val();
+        var price = $(e.target).find('input[name=price]').val();
+        var _csrf = this.props._csrf;
+        this.props.route.onSave({name: name, price: price, _csrf: _csrf});
+    },
+    delete: function (e) {
+        e.preventDefault();
+        var item_id = $(e.target).find('input[name=item_id]').val();
+        var _csrf = this.props._csrf;
+        this.props.route.onDelete({item_id: item_id, _csrf: _csrf, _method: 'DELETE'});
+    },
+    componentDidMount: function() {
+        Store.addListener('productChange', this.onChange);
+    },
+
+    componentWillUnmount: function() {
+        Store.subtractListener('productChange', this.onChange);
+    },
+    onChange: function () {
+        this.setState(this.getInitialState());
     }
 });
