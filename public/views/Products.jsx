@@ -82,7 +82,7 @@ module.exports = React.createClass({
         e.preventDefault();
         var item_id = $(e.target).find('input[name=item_id]').val();
         var _csrf = this.props._csrf;
-        this.props.route.onDelete({item_id: item_id, _csrf: _csrf});
+        this.props.route.onDelete({item_id: item_id, _csrf: _csrf, _method: 'DELETE'});
     },
     componentDidMount: function() {
         Store.addListener('productChange', this.onChange);
