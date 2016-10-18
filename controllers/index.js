@@ -82,7 +82,8 @@ var modelBuilder = function (req, res, callback) {
 		model.cart = result.cart;
 		callback(null, model);
 	});
-}
+};
+
 module.exports.cart = function (req, res, next) {
 
 	//Load (or initialize) the cart
@@ -90,7 +91,7 @@ module.exports.cart = function (req, res, next) {
 	var cart = req.session.cart;
 
 	//Read the incoming product data
-	var id = req.param('item_id');
+	var id = req.body.item_id;
 
 	//Locate the product to be added
 	Product.findById(id, function (err, prod) {
@@ -130,7 +131,7 @@ module.exports.setLocale = function (req, res) {
 		res.redirect('/');
 	};
 
-module.exports.newProduct = function (req, res) {
+module.exports.newProduct = function (req, res, next) {
 	var name = req.body.name && req.body.name.trim();
 
 	//***** PLEASE READ THIS COMMENT ******\\\
@@ -192,15 +193,15 @@ module.exports.deleteProduct = function (req, res, next) {
 	});
 };
 
-module.exports.pay = function (req, res) {
+module.exports.pay = function (req, res, next) {
 
 	//Read the incoming product data
-	var cc = req.param('cc');
-	var firstName = req.param('firstName');
-	var lastName = req.param('lastName');
-	var expMonth = req.param('expMonth');
-	var expYear = req.param('expYear');
-	var cvv = req.param('cvv');
+	var cc = req.body.cc;
+	var firstName = req.body.firstName;
+	var lastName = req.body.lastName;
+	var expMonth = req.body.expMonth;
+	var expYear = req.body.expYear;
+	var cvv = req.body.cvv;
 
 	//Ready the payment information to pass to the PayPal library
 	var payment = {
@@ -257,7 +258,7 @@ module.exports.pay = function (req, res) {
 					return next(err);
 				}
 				model.cart.result =  res.bundle.get('paymentSuccess');
-				model.cart.continueMessage = res.bundle.get('keepShopping')
+				model.cart.continueMessage = res.bundle.get('keepShopping');
 				res.status(200).json(model);
 			});
 
