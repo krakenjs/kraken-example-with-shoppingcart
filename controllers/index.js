@@ -91,7 +91,7 @@ module.exports.cart = function (req, res, next) {
 	var id = req.body.item_id;
 
 	//Locate the product to be added
-	var prod = Product.product.find({_id: id})
+	var prod = Product.product.find({'_id': Number(id)})[0]
 
 	//Add or increase the product quantity in the shopping cart.
 	if (cart[id]) {
