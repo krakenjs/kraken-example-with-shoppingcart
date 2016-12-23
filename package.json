@@ -47,6 +47,7 @@
     "kraken-format-path": "^1.0.0",
     "kraken-js": "^2.0.1",
     "lodash": "^4.13.1",
+    "lokijs": "^1.4.2",
     "mongoose": "~3.8.8",
     "node-jsx": "^0.13.3",
     "object-assign": "^4.1.0",

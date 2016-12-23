@@ -4,7 +4,7 @@
 var Product = require('../models/productModel');
 var async = require('async');
 var paypal = require('paypal-rest-sdk');
-
+var productIds = 0;
 
 module.exports.index = function (req, res, next) {
 	modelBuilder(req, res, function (err, model) {
@@ -55,25 +55,22 @@ var modelBuilder = function (req, res, callback) {
 	};
 
 	var getProducts = function (callback) {
-		Product.find(function (err, prods) {
-			if (err) {
-				console.log(err);
-			}
-			prods = prods.map(function (prod) {
-				prod.prettyPrice = prod.prettifyPrice();
-				return prod;
-			});
-			var staticProd = [{
-				prettyPrice: '$100.00',
-				name: 'foo',
-				id: 1
-			}];
-			var model = {
-				products: prods,
-				title: 'Kraken Store'
-			};
-			callback(null, model);
+		var prods = Product.product.find();
+			
+		prods = prods.map(function (prod) {
+			prod.prettyPrice = Product.prettifyPrice(prod);
+			return prod;
 		});
+		var staticProd = [{
+			prettyPrice: '$100.00',
+			name: 'foo',
+			id: 1
+		}];
+		var model = {
+			products: prods,
+			title: 'Kraken Store'
+		};
+		callback(null, model);
 	};
 	async.parallel({cart: getCart, products: getProducts}, function (err, result) {
 		var model = {};
@@ -94,33 +91,28 @@ module.exports.cart = function (req, res, next) {
 	var id = req.body.item_id;
 
 	//Locate the product to be added
-	Product.findById(id, function (err, prod) {
+	var prod = Product.product.find({_id: id})
+
+	//Add or increase the product quantity in the shopping cart.
+	if (cart[id]) {
+		cart[id].qty++;
+	}
+	else {
+		cart[id] = {
+			name: prod.name,
+			price: prod.price,
+			prettyPrice: Product.prettifyPrice(prod),
+			qty: 1
+		};
+	}
+	modelBuilder(req, res, function (err, model) {
 		if (err) {
-			console.log('Error adding product to cart: ', err);
 			return next(err);
 		}
-
-		//Add or increase the product quantity in the shopping cart.
-		if (cart[id]) {
-			cart[id].qty++;
-		}
-		else {
-			cart[id] = {
-				name: prod.name,
-				price: prod.price,
-				prettyPrice: prod.prettifyPrice(),
-				qty: 1
-			};
-		}
-		modelBuilder(req, res, function (err, model) {
-			if (err) {
-				return next(err);
-			}
-			res.status(200).json(model);
-		});
-
-
+		res.status(200).json(model);
 	});
+
+
 };
 module.exports.setLocale = function (req, res) {
 		var localeString = req.params.locale;
@@ -155,42 +147,32 @@ module.exports.newProduct = function (req, res, next) {
 		res.status(200).json({rekt: true});
 		return;
 	}
-
-	var newProduct = new Product({name: name, price: price});
+	productIds = productIds + 1;
+	var newProduct = Product.product.insert({name: name, price: price, _id: productIds});
 
 	//Show it in console for educational purposes...
-	console.log(newProduct.whatAmI());
+	console.log(Product.whatAmI(newProduct));
 
 	/* The call back recieves to more arguments ->product/s that is/are added to the database
 	 and number of rows that are affected because of save, which right now are ignored
 	 only errors object is consumed*/
-	newProduct.save(function (err) {
+	modelBuilder(req, res, function (err, model) {
 		if (err) {
-			console.log('save error', err);
+			return next(err);
 		}
-
-		modelBuilder(req, res, function (err, model) {
-			if (err) {
-				return next(err);
-			}
-			res.status(200).json(model);
-		});
+		res.status(200).json(model);
 	});
 };
 
 module.exports.deleteProduct = function (req, res, next) {
-	Product.remove({_id: req.body.item_id}, function (err) {
+	Product.product.remove(Product.product.find({_id: req.body.item_id}));
+	modelBuilder(req, res, function (err, model) {
 		if (err) {
-			console.error('Remove error: ', err);
 			return next(err);
 		}
-		modelBuilder(req, res, function (err, model) {
-			if (err) {
-				return next(err);
-			}
-			res.status(200).json(model);
-		});
+		res.status(200).json(model);
 	});
+
 };
 
 module.exports.pay = function (req, res, next) {

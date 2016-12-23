@@ -2,6 +2,11 @@
 
 var mongoose = require('mongoose');
 
+var loki = require('lokijs');
+var db = new loki('product');
+var products = db.addCollection('product', {indices: ['_id']});
+
+
 var productModel = function () {
 
     //Define a super simple schema for our products.
@@ -27,5 +32,16 @@ var productModel = function () {
     return mongoose.model('Product', productSchema);
 
 };
-
-module.exports = new productModel();
+var local;
+module.exports = local = {
+    product: products,
+    prettifyPrice: function (prod) {
+        return (prod && prod.price) ? '$' + prod.price.toFixed(2) : '$';
+    },
+    whatAmI: function (prod) {
+        var greeting = prod.name ?
+            'Hello, I\'m a ' + prod.name + ' and I\'m worth ' + local.prettifyPrice(prod)
+            : 'I don\'t have a name :(';
+        return greeting;
+    }
+}
