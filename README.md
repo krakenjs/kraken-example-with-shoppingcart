@@ -1,10 +1,10 @@
 # kraken-example-with-shoppingcart
 
-Kraken with Shopping Cart, universal react view rendering, and PayPal integration
+Kraken with Shopping Cart, universal react view rendering, and PayPal integration. Uses [lokijs](https://github.com/techfort/LokiJS) as an in-memory database. 
+You can easily swap out for an external database, such as MongoDB.
 
 ## Prerequisites
-* This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
-* You will -- of course -- need [Node](http://nodejs.org) (Version >= 0.10.22 preferred)
+* You will need [Node](http://nodejs.org) (Version >= 4 preferred)
 
 ## Installation
 
@@ -105,20 +105,6 @@ The flux-based patterns can be found in the files under `public/js/*.js`. You ca
 - The above block also specifies `routes.jsx` as this application makes use of [`react-router`](https://www.npmjs.com/package/react-router).
 - The browser react renderer is configured in `public/main.js`
 
-### mongodb
-
-Pre-requisite: An instance of [MongoDB](http://www.mongodb.org/downloads) installed and running on its default port.
-
-config changes (config.json):
-```javascript
-"databaseConfig": {
-	"host": "localhost",
-	"database": "shocart"
-},
-```
-
-`lib/database.js`: configure and connect to mongodb instance
-`lib/spec.js`: call database.js config method in the kraken-js onconfig event
 
 ### PayPal SDK
 
@@ -132,6 +118,11 @@ config changes (config.json):
 	"client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM"
 },
 ```
+### onconfig
+
+`lib/spec.js` configures the PayPal SDK upon startup
+
+### Payment
 
 Payment initiated in the `/pay` route which is defined in controllers/pay/index.js
 

@@ -23,10 +23,6 @@
         "contentPath": "path:./locales",
         "fallback": "en-US"
     },
-    "databaseConfig": {
-        "host": "localhost",
-        "database": "shocart"
-    },
     "paypalConfig": {
         "host": "api.sandbox.paypal.com",
         "port": "",
