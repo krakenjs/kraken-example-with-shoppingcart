@@ -29,7 +29,6 @@ Visit [`http://localhost:8000`](http://localhost:8000)
 * [`flux`](https://www.npmjs.com/package/flux) to manage the application lifecycle and architecture
 * ['browserify`](https://www.npmjs.com/package/browserify) for browser JavaScript dependency management
 * [`bundalo`](https://www.npmjs.com/package/bundalo) for localized messages with model data
-* mongodb for storing product information
 * Integration with the PayPal SDK
 
 ### React components
